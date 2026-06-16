@@ -298,12 +298,11 @@ def show_login():
                         st.rerun()
                     else:
                         st.error("Please enter email and password")
-=======
+
                 if st.form_submit_button("Verify Account Profile", use_container_width=True):
                     if email.strip() and password.strip():
                         # 1. Run rigorous verification check against db engine
                         user_profile = db_client.verify_or_create_user(email, password)
->>>>>>> 589ef92
 
                         if user_profile:
                             st.session_state.authenticated = True
