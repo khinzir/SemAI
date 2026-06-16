@@ -277,7 +277,6 @@ def show_login():
                 email = st.text_input("Academic Email Address")
                 password = st.text_input("Security Passcode", type="password")
 
-<<<<<<< HEAD
                 if st.form_submit_button("Login", use_container_width=True):
                     if email and password:
                         # Connect with the database user profile validation
