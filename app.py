@@ -346,7 +346,7 @@ def show_login():
     """Display login/signup interface"""
     st.markdown("""
     <div class='header-container'>
-        <h1>🎓 CSIT Guru</h1>
+        <h1>🎓 SemAI</h1>
         <p>Intelligent Tutoring System for CSIT Students</p>
         <p style='font-size: 0.9rem; opacity: 0.9'>Semester 1 • 5 Subjects • AI-Powered Learning</p>
     </div>
