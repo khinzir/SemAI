@@ -348,7 +348,6 @@ def show_login():
     <div class='header-container'>
         <h1>🎓 SemAI</h1>
         <p>Intelligent Tutoring System for CSIT Students</p>
-        <p style='font-size: 0.9rem; opacity: 0.9'>Semester 1 • 5 Subjects • AI-Powered Learning</p>
     </div>
     """, unsafe_allow_html=True)
 
