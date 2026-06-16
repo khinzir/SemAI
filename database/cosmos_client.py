@@ -10,20 +10,24 @@ import json
 
 class CosmosClientManager:
     def __init__(self):
-        # Gracefully pull strings from secrets or fall back to production defaults
         connection_string = os.getenv("COSMOS_DB_CONNECTION_STRING")
-        database_name = os.getenv("COSMOS_DB_NAME", "csit-guru")
-        container_name = os.getenv("COSMOS_DB_CONTAINER", "chat-history")
 
-        self.client = CosmosClient.from_connection_string(connection_string)
+        if connection_string:
+            try:
+                # Use Azure Cosmos DB
+                self.client = CosmosClient.from_connection_string(connection_string)
+                self.database_name = os.getenv("COSMOS_DB_NAME", "csit-semai")
+                self.container_name = os.getenv("COSMOS_DB_CONTAINER", "user-data")
 
-        # Ensures the script automatically builds the structures if Azure can't find them
-        self.database = self.client.create_database_if_not_exists(id=database_name)
-        self.container = self.database.create_container_if_not_exists(
-            id=container_name,
-            partition_key=PartitionKey(path="/id"),
-            offer_throughput=400
-        )
+                self._init_cosmos()
+                self.use_cosmos = True
+            except Exception:
+                self.use_cosmos = False
+                self._init_sqlite()
+        else:
+            # Fallback to SQLite
+            self.use_cosmos = False
+            self._init_sqlite()
 
     def _init_cosmos(self):
         """Initialize Cosmos DB containers"""
