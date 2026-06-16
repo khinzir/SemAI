@@ -243,11 +243,110 @@ db_client, llm_client, search_client = init_clients()
 
 # ==================== AUTHENTICATION ====================
 
+# def show_login():
+#     """Display login/signup interface"""
+#     st.markdown("""
+#     <div class='header-container'>
+#         <h1>🎓 SemAI</h1>
+#         <p>Intelligent Tutoring System for CSIT Students</p>
+#         <p style='font-size: 0.9rem; opacity: 0.9'>Semester 1 • 5 Subjects • AI-Powered Learning</p>
+#     </div>
+#     """, unsafe_allow_html=True)
+#
+#     col1, col2, col3 = st.columns([1, 2, 1])
+#
+#     with col2:
+#         tab1, tab2 = st.tabs(["🔐 Login", "📝 Sign Up"])
+#
+#         with tab1:
+#             # with st.form("login_form"):
+#             #     email = st.text_input("Email")
+#             #     password = st.text_input("Password", type="password")
+#             #
+#             #     if st.form_submit_button("Login", use_container_width=True):
+#             #         if email and password:
+#             #             # Simple demo authentication
+#             #             # In production, use proper auth
+#             #             st.session_state.authenticated = True
+#             #             st.session_state.user_id = email.replace("@", "_").replace(".", "_")
+#             #             st.session_state.selected_semester = 1  # Default to semester 1
+#             #             st.rerun()
+#             #         else:
+#             #             st.error("Please enter email and password")
+#             with st.form("login_form"):
+#                 email = st.text_input("Academic Email Address")
+#                 password = st.text_input("Security Passcode", type="password")
+#
+#                 if st.form_submit_button("Login", use_container_width=True):
+#                     if email and password:
+#                         # Connect with the database user profile validation
+#                         user_profile = db_client.verify_or_create_user(email, password)
+#                         user_id = user_profile["user_id"]
+#
+#                         st.session_state.authenticated = True
+#                         st.session_state.user_id = user_id
+#                         st.session_state.selected_semester = 1
+#
+#                         # DOWNLOAD LOGGED PERSISTENT MINUTES ON LOGIN
+#                         from config.course_structure import get_subjects
+#                         subjects = get_subjects(1)
+#                         for subj_code in subjects.keys():
+#                             key = f"{user_id}_1_{subj_code}"
+#                             st.session_state.study_timers[key] = db_client.get_progress(user_id, 1, subj_code)
+#
+#                         st.rerun()
+#                     else:
+#                         st.error("Please enter email and password")
+#
+#                 if st.form_submit_button("Verify Account Profile", use_container_width=True):
+#                     if email.strip() and password.strip():
+#                         # 1. Run rigorous verification check against db engine
+#                         user_profile = db_client.verify_or_create_user(email, password)
+#
+#                         if user_profile:
+#                             st.session_state.authenticated = True
+#                             st.session_state.user_id = user_profile["user_id"]
+#                             st.session_state.selected_semester = user_profile["selected_semester"]
+#
+#                             # 2. Rehydrate state progress bars across sessions
+#                             st.session_state.study_timers = db_client.load_all_user_progress(user_profile["user_id"])
+#
+#                             st.success("Verification successful! Opening profile workspace...")
+#                             st.rerun()
+#                         else:
+#                             st.error("Authentication failed. Invalid passcode match.")
+#         with tab2:
+#             with st.form("signup_form"):
+#                 name = st.text_input("Full Name")
+#                 email = st.text_input("Email")
+#                 password = st.text_input("Password", type="password")
+#                 confirm_password = st.text_input("Confirm Password", type="password")
+#
+#                 if st.form_submit_button("Sign Up", use_container_width=True):
+#                     if password != confirm_password:
+#                         st.error("Passwords don't match")
+#                     elif email and password:
+#                         user_profile = db_client.verify_or_create_user(email, password)
+#                         user_id = user_profile["user_id"]
+#
+#                         st.session_state.authenticated = True
+#                         st.session_state.user_id = user_id
+#                         st.session_state.selected_semester = 1
+#
+#                         # Populate fresh entries for a new registration profile
+#                         from config.course_structure import get_subjects
+#                         for subj_code in get_subjects(1).keys():
+#                             key = f"{user_id}_1_{subj_code}"
+#                             st.session_state.study_timers[key] = 0
+#                             db_client.save_progress(user_id, 1, subj_code, 0)
+#                         st.rerun()
+#                     else:
+#                         st.error("Please fill all fields")
 def show_login():
     """Display login/signup interface"""
     st.markdown("""
     <div class='header-container'>
-        <h1>🎓 SemAI</h1>
+        <h1>🎓 CSIT Guru</h1>
         <p>Intelligent Tutoring System for CSIT Students</p>
         <p style='font-size: 0.9rem; opacity: 0.9'>Semester 1 • 5 Subjects • AI-Powered Learning</p>
     </div>
@@ -259,62 +358,20 @@ def show_login():
         tab1, tab2 = st.tabs(["🔐 Login", "📝 Sign Up"])
 
         with tab1:
-            # with st.form("login_form"):
-            #     email = st.text_input("Email")
-            #     password = st.text_input("Password", type="password")
-            #
-            #     if st.form_submit_button("Login", use_container_width=True):
-            #         if email and password:
-            #             # Simple demo authentication
-            #             # In production, use proper auth
-            #             st.session_state.authenticated = True
-            #             st.session_state.user_id = email.replace("@", "_").replace(".", "_")
-            #             st.session_state.selected_semester = 1  # Default to semester 1
-            #             st.rerun()
-            #         else:
-            #             st.error("Please enter email and password")
             with st.form("login_form"):
-                email = st.text_input("Academic Email Address")
-                password = st.text_input("Security Passcode", type="password")
+                email = st.text_input("Email")
+                password = st.text_input("Password", type="password")
 
                 if st.form_submit_button("Login", use_container_width=True):
                     if email and password:
-                        # Connect with the database user profile validation
-                        user_profile = db_client.verify_or_create_user(email, password)
-                        user_id = user_profile["user_id"]
-
+                        # Clean local prototype authentication
                         st.session_state.authenticated = True
-                        st.session_state.user_id = user_id
-                        st.session_state.selected_semester = 1
-
-                        # DOWNLOAD LOGGED PERSISTENT MINUTES ON LOGIN
-                        from config.course_structure import get_subjects
-                        subjects = get_subjects(1)
-                        for subj_code in subjects.keys():
-                            key = f"{user_id}_1_{subj_code}"
-                            st.session_state.study_timers[key] = db_client.get_progress(user_id, 1, subj_code)
-
+                        st.session_state.user_id = email.replace("@", "_").replace(".", "_")
+                        st.session_state.selected_semester = 1  # Default to semester 1
                         st.rerun()
                     else:
                         st.error("Please enter email and password")
 
-                if st.form_submit_button("Verify Account Profile", use_container_width=True):
-                    if email.strip() and password.strip():
-                        # 1. Run rigorous verification check against db engine
-                        user_profile = db_client.verify_or_create_user(email, password)
-
-                        if user_profile:
-                            st.session_state.authenticated = True
-                            st.session_state.user_id = user_profile["user_id"]
-                            st.session_state.selected_semester = user_profile["selected_semester"]
-
-                            # 2. Rehydrate state progress bars across sessions
-                            st.session_state.study_timers = db_client.load_all_user_progress(user_profile["user_id"])
-
-                            st.success("Verification successful! Opening profile workspace...")
-                            st.rerun()
-                        else:
-                            st.error("Authentication failed. Invalid passcode match.")
         with tab2:
             with st.form("signup_form"):
                 name = st.text_input("Full Name")
@@ -326,19 +383,9 @@ def show_login():
                     if password != confirm_password:
                         st.error("Passwords don't match")
                     elif email and password:
-                        user_profile = db_client.verify_or_create_user(email, password)
-                        user_id = user_profile["user_id"]
-
                         st.session_state.authenticated = True
-                        st.session_state.user_id = user_id
+                        st.session_state.user_id = email.replace("@", "_").replace(".", "_")
                         st.session_state.selected_semester = 1
-
-                        # Populate fresh entries for a new registration profile
-                        from config.course_structure import get_subjects
-                        for subj_code in get_subjects(1).keys():
-                            key = f"{user_id}_1_{subj_code}"
-                            st.session_state.study_timers[key] = 0
-                            db_client.save_progress(user_id, 1, subj_code, 0)
                         st.rerun()
                     else:
                         st.error("Please fill all fields")
