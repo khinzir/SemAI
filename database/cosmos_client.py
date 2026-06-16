@@ -1,3 +1,149 @@
+#
+# """
+# Azure Cosmos DB client for data persistence
+# """
+# import os
+# from azure.cosmos import CosmosClient, PartitionKey, exceptions
+# from datetime import datetime
+# import uuid
+#
+# class CosmosClientManager:
+#     def __init__(self):
+#         connection_string = os.getenv("COSMOS_DB_CONNECTION_STRING")
+#
+#         if connection_string:
+#             # Use Azure Cosmos DB
+#             self.client = CosmosClient.from_connection_string(connection_string)
+#             self.database_name = os.getenv("COSMOS_DB_NAME", "csit-semai")
+#             self.container_name = os.getenv("COSMOS_DB_CONTAINER", "user-data")
+#
+#             self._init_cosmos()
+#             self.use_cosmos = True
+#         else:
+#             # Fallback to SQLite
+#             self.use_cosmos = False
+#             self._init_sqlite()
+#
+#     def _init_cosmos(self):
+#         """Initialize Cosmos DB containers"""
+#         try:
+#             database = self.client.create_database_if_not_exists(id=self.database_name)
+#             self.container = database.create_container_if_not_exists(
+#                 id=self.container_name,
+#                 partition_key=PartitionKey(path="/user_id"),
+#                 offer_throughput=400
+#             )
+#         except exceptions.CosmosResourceExistsError:
+#             database = self.client.get_database_client(self.database_name)
+#             self.container = database.get_container_client(self.container_name)
+#
+#     def _init_sqlite(self):
+#         """Fallback to SQLite"""
+#         import sqlite3
+#         self.db_path = "local_csit_semai.db"
+#         conn = sqlite3.connect(self.db_path)
+#         cursor = conn.cursor()
+#
+#         # Create tables
+#         cursor.execute("""
+#             CREATE TABLE IF NOT EXISTS messages (
+#                 id TEXT PRIMARY KEY,
+#                 user_id TEXT,
+#                 subject TEXT,
+#                 role TEXT,
+#                 content TEXT,
+#                 citations TEXT,
+#                 timestamp TEXT
+#             )
+#         """)
+#
+#         cursor.execute("""
+#             CREATE TABLE IF NOT EXISTS progress (
+#                 user_id TEXT,
+#                 semester INTEGER,
+#                 subject_code TEXT,
+#                 minutes_studied INTEGER,
+#                 PRIMARY KEY (user_id, semester, subject_code)
+#             )
+#         """)
+#
+#         conn.commit()
+#         conn.close()
+#
+#     def save_message(self, user_id: str, subject: str, role: str, content: str, citations: list = None):
+#         """Save chat message"""
+#         message_id = str(uuid.uuid4())
+#         timestamp = datetime.utcnow().isoformat()
+#
+#         if self.use_cosmos:
+#             self.container.upsert_item({
+#                 "id": message_id,
+#                 "user_id": user_id,
+#                 "subject": subject,
+#                 "role": role,
+#                 "content": content,
+#                 "citations": citations or [],
+#                 "timestamp": timestamp
+#             })
+#         else:
+#             import sqlite3
+#             import json
+#             conn = sqlite3.connect(self.db_path)
+#             cursor = conn.cursor()
+#             cursor.execute("""
+#                 INSERT INTO messages (id, user_id, subject, role, content, citations, timestamp)
+#                 VALUES (?, ?, ?, ?, ?, ?, ?)
+#             """, (message_id, user_id, subject, role, content, json.dumps(citations or []), timestamp))
+#             conn.commit()
+#             conn.close()
+#
+#     def save_progress(self, user_id: str, semester: int, subject_code: str, minutes: int):
+#         """Save study progress"""
+#         if self.use_cosmos:
+#             progress_id = f"{user_id}_{semester}_{subject_code}"
+#             self.container.upsert_item({
+#                 "id": progress_id,
+#                 "user_id": user_id,
+#                 "semester": semester,
+#                 "subject_code": subject_code,
+#                 "minutes_studied": minutes,
+#                 "last_updated": datetime.utcnow().isoformat()
+#             })
+#         else:
+#             import sqlite3
+#             conn = sqlite3.connect(self.db_path)
+#             cursor = conn.cursor()
+#             cursor.execute("""
+#                 INSERT OR REPLACE INTO progress (user_id, semester, subject_code, minutes_studied)
+#                 VALUES (?, ?, ?, ?)
+#             """, (user_id, semester, subject_code, minutes))
+#             conn.commit()
+#             conn.close()
+#
+#     def get_progress(self, user_id: str, semester: int, subject_code: str) -> int:
+#         """Get study progress"""
+#         if self.use_cosmos:
+#             try:
+#                 item = self.container.read_item(
+#                     item=f"{user_id}_{semester}_{subject_code}",
+#                     partition_key=user_id
+#                 )
+#                 return item.get("minutes_studied", 0)
+#             except:
+#                 return 0
+#         else:
+#             import sqlite3
+#             conn = sqlite3.connect(self.db_path)
+#             cursor = conn.cursor()
+#             cursor.execute("""
+#                 SELECT minutes_studied FROM progress
+#                 WHERE user_id = ? AND semester = ? AND subject_code = ?
+#             """, (user_id, semester, subject_code))
+#             result = cursor.fetchone()
+#             conn.close()
+#             return result[0] if result else 0
+
+
 """
 Azure Cosmos DB client for data persistence
 """
