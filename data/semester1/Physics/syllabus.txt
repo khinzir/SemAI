@@ -1,0 +1,107 @@
+PHY118 - Physics
+
+Course Title: Physics
+Course No: PHY118
+Nature of Course: Theory + Lab
+Semester: I
+Credit Hours: 3
+
+Full Marks: 60 + 20 + 20
+Pass Marks: 24 + 8 + 8
+
+Course Description
+
+This course covers the fundamentals of physics including oscillations, electromagnetic theory, basics of quantum mechanics, band theory, semiconductors, universal logic gates, and the physics of manufacturing integrated circuits.
+
+Course Objectives
+
+The main objective of this course is to provide knowledge in physics and apply this knowledge to computer science and information technology.
+
+Course Contents
+Unit 1: Rotational Dynamics and Oscillatory Motion (5 Hrs.)
+Moment of Inertia
+Torque
+Rotational Kinetic Energy
+Conservation of Angular Momentum
+Oscillation of Spring:
+Frequency
+Period
+Amplitude
+Phase Angle
+Energy
+Unit 2: Electric and Magnetic Field (5 Hrs.)
+Electric Field
+Electric Potential
+Magnetic Field
+Force on a Current-Carrying Wire
+Magnetic Dipole Moment
+Force on a Moving Charge
+Hall Effect
+Electromagnetic Waves
+Unit 3: Fundamentals of Atomic Theory (8 Hrs.)
+Blackbody Radiation
+Bohr Atom
+Spectrum of Hydrogen
+Franck-Hertz Experiment
+de Broglie Hypothesis and Experimental Verification
+Uncertainty Principle and Its Origin
+Matter Waves and the Uncertainty Principle
+Group Velocity
+Unit 4: Methods of Quantum Mechanics (5 Hrs.)
+Schrödinger Theory of Quantum Mechanics
+Applications of Schrödinger Theory
+Outline of the Solution of Schrödinger Equation for Hydrogen Atom
+Space Quantization
+Spin
+Atomic Wave Functions
+Unit 5: Fundamentals of Solid State Physics (6 Hrs.)
+Crystal Structure
+Crystal Bonding
+Classical Free Electron Model
+Quantum Mechanical Free Electron Model
+Bloch Theorem
+Kronig-Penney Model
+Tight-Binding Approximation
+Conductors
+Insulators
+Semiconductors
+Effective Mass
+Holes
+Unit 6: Semiconductor and Semiconductor Devices (8 Hrs.)
+Intrinsic Semiconductors
+Extrinsic Semiconductors
+Electrical Conductivity of Semiconductors
+Photoconductivity
+Metal-Metal Junction and Contact Potential
+Semiconductor Diode
+Bipolar Junction Transistor (BJT)
+Field Effect Transistor (FET)
+Unit 7: Universal Gates and Physics of Integrated Circuits (8 Hrs.)
+Universal Gates
+RTL Gates
+TTL Gates
+Memory Circuits
+Clock Circuits
+Semiconductor Purification:
+Zone Refining
+Single Crystal Growth
+Processes of IC Production
+Electronic Component Fabrication on a Chip
+Laboratory Works
+
+Students should be able to perform at least one experiment from:
+
+Unit 1: Rotational Dynamics and Oscillatory Motion
+Unit 2: Electric and Magnetic Field
+Unit 5: Fundamentals of Solid State Physics
+Unit 6: Semiconductor and Semiconductor Devices
+Unit 7: Universal Gates and Physics of Integrated Circuits
+
+The details of the experiments will be provided in the laboratory manual.
+
+Text Book
+Garcia Narciso and Arthur Damask, Physics for Computer Science Students, Springer-Verlag.
+Reference Books
+David Halliday, Robert Resnick, and Jearl Walker, Fundamentals of Physics, 9th Edition, John Wiley & Sons.
+Francis W. Sears, Hugh D. Young, Roger Freedman, and Mark Zemansky, University Physics, Volumes 1 & 2, 14th Edition, Pearson.
+Randall D. Knight, Physics for Scientists and Engineers: A Strategic Approach, 3rd Edition, Pearson.

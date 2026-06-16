@@ -1,0 +1,390 @@
+{
+  "subject": "C_Programming",
+  "semester": 1,
+  "qa_pairs": [
+    {
+      "id": "C_2065_01",
+      "question": "Draw the flow chart for finding largest of three numbers and write an algorithm and explain it.",
+      "answer": "Algorithm:\nStep 1: Start\nStep 2: Declare variables a, b, c\nStep 3: Read values of a, b, c\nStep 4: if a > b\n    if a > c\n        Print a is the greatest number\n    else\n        Print c is the greatest number\nelse\n    if b > c\n        Print b is the greatest number\n    else\n        Print c is the greatest number\nStep 5: Stop\n\nFlowchart: (Draw start/end ovals, input parallelogram, diamond decisions, output boxes as per logic above)",
+      "difficulty": "easy",
+      "topic": "Flowchart and Algorithm",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_02",
+      "question": "Find the value of 'a' in each of the following statements. int i=3, j=4, k=8; float a=4.5, b=6.5, c=3.5; a) a = b - i/k + c/k; b) a = (b - k)/j + (j + c)/k; c) a = c - ((i + j)/(k + i))*b; d) a = c - i + j/k + i*b; e) a = c + j%2 + b; f) a = (b + 1)%(c + 1)",
+      "answer": "a) a = 6.5 - 3/8 + 3.5/8 = 6.5 - 0 + 0.4375 = 6.9375\nb) a = (6.5 - 8)/4 + (4 + 3.5)/8 = -1.5/4 + 7.5/8 = -0.375 + 0.9375 = 0.5625\nc) a = 3.5 - ((3+4)/(8+3))*6.5 = 3.5 - (7/11)*6.5 = 3.5 - 0*6.5 = 3.5\nd) a = 3.5 - 3 + 4/8 + 3*6.5 = 0.5 + 0 + 19.5 = 20\ne) a = 3.5 + 4%2 + 6.5 = 3.5 + 0 + 6.5 = 10\nf) (6.5+1)%(3.5+1) = 7.5%4.5 → Not valid (modulus requires integers)",
+      "difficulty": "medium",
+      "topic": "Expressions and Operators",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_03",
+      "question": "Write a program for the interest charged in installments: A cassette player costs Rs. 2000. Shopkeeper sells it for Rs. 100 down payment and Rs. 100 for 21 more months. What is the monthly interest charged?",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    float c_price, t_price, t_interest, m_interest;\n    c_price = 2000;\n    t_price = 100 + (100*21);\n    t_interest = (t_price - c_price)/c_price * 100;\n    m_interest = t_interest/22;\n    printf(\"The monthly interest charged is %.2f\", m_interest);\n    getch();\n}\n// Result: 0.45% per month",
+      "difficulty": "medium",
+      "topic": "Loops and Arithmetic",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_04",
+      "question": "Write a program that uses a 'for' loop to compute and print the sum of squares of given numbers.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int i, n, sum = 0;\n    printf(\"Enter the number:\");\n    scanf(\"%d\",&n);\n    for(i=1;i<=n;i++) {\n        sum = i*i + sum;\n    }\n    printf(\"\\n Sum = %d\", sum);\n    getch();\n}",
+      "difficulty": "easy",
+      "topic": "Loops",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_05",
+      "question": "Write a program to obtain the product of two matrices and explain it.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int a[3][3]={{3,5,7},{2,-3,4},{4,5,2}};\n    int b[3][2]={{7,6},{6,-5},{4,3}};\n    int i,j,k,c[3][2];\n    for(i=0;i<3;i++) {\n        for(j=0;j<2;j++) {\n            c[i][j]=0;\n            for(k=0;k<3;k++) {\n                c[i][j]=c[i][j]+a[i][k]*b[k][j];\n            }\n        }\n    }\n    // Print result matrix c\n}",
+      "difficulty": "hard",
+      "topic": "Arrays and Matrices",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_06",
+      "question": "Write a user-defined function to multiply two complex numbers.",
+      "answer": "void mul(int r1,int ip1,int r2,int ip2) {\n    int realmul, imgmul, imgmul1, imgmul2;\n    realmul = r1*r2;\n    imgmul = ip1*ip2;\n    imgmul1 = r1*ip2;\n    imgmul2 = r2*ip1;\n    printf(\"Multiplication = %d + i(%d+%d)%d\\n\", realmul, imgmul1, imgmul2, imgmul);\n}\n\nvoid add(int r1,int ip1,int r2,int ip2) {\n    int realsum = r1+r2;\n    int imgsum = ip1+ip2;\n    printf(\"Sum = %d + i(%d)\\n\", realsum, imgsum);\n}",
+      "difficulty": "medium",
+      "topic": "Functions",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_07",
+      "question": "Write a program which will read a line and delete from it all occurrences of the word 'that'.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    char str[]=\"I that love c that programming.\";\n    int i;\n    for(i=0;str[i]!='\\0';i++) {\n        if(str[i]==116 && str[i+1]==104 && str[i+2]==97 && str[i+3]==116 && str[i+4]==32) {\n            int j=i;\n            while(str[j+5]!='\\0') {\n                str[j]=str[j+5];\n                j++;\n            }\n            str[j]='\\0';\n            i=0;\n        }\n    }\n    printf(\"%s\",str);\n    getch();\n}",
+      "difficulty": "hard",
+      "topic": "String Manipulation",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_08",
+      "question": "What is a pointer and explain its applications? Write a program that uses pointers to copy an array of double.",
+      "answer": "A pointer is a variable that contains the address of another variable in memory. Applications: dynamic memory allocation, array manipulation, function argument passing by reference, efficient data structures.\n\n#include<stdio.h>\ndouble *copy(double a[],int n);\nvoid main() {\n    double a[10], *b;\n    int i;\n    for(i=0;i<10;i++) scanf(\"%lf\",&a[i]);\n    b = copy(a,10);\n    for(i=0;i<10;i++) printf(\"\\n%lf\",b[i]);\n    getch();\n}\ndouble *copy(double a[],int n) {\n    static double p[10];\n    int i;\n    for(i=0;i<n;i++) p[i]=a[i];\n    return p;\n}",
+      "difficulty": "medium",
+      "topic": "Pointers",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_09",
+      "question": "Define a structure of employee having data members name, address, age, and salary. Take data for n employees dynamically and find the average salary.",
+      "answer": "#include<stdio.h>\n#include<alloc.h>\nstruct employee {\n    char name[50];\n    char add[50];\n    int age;\n    int salary;\n};\nvoid main() {\n    struct employee *p;\n    int i,n;\n    float avg,sum=0;\n    printf(\"Enter number of employees:\");\n    scanf(\"%d\",&n);\n    p = (struct employee*) calloc(n, sizeof(struct employee));\n    for(i=0;i<n;i++) {\n        printf(\"Enter name:\"); gets((p+i)->name);\n        printf(\"Enter address:\"); gets((p+i)->add);\n        printf(\"Enter age:\"); scanf(\"%d\",&(p+i)->age);\n        printf(\"Enter salary:\"); scanf(\"%d\",&(p+i)->salary);\n    }\n    for(i=0;i<n;i++) sum += (p+i)->salary;\n    avg = sum/n;\n    printf(\"Average salary = %f\", avg);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Structures",
+      "year": 2065
+    },
+    {
+      "id": "C_2065_10",
+      "question": "Given a text file, create another text file deleting the words 'three', 'bad', and 'time'.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\n#include<string.h>\nvoid main() {\n    FILE *fp, *fp2;\n    char str[100];\n    fp = fopen(\"old.txt\",\"r\");\n    fp2 = fopen(\"new.txt\",\"w\");\n    while(fscanf(fp,\"%s\",str)!=EOF) {\n        if(strcmp(str,\"three\")!=0 && strcmp(str,\"bad\")!=0 && strcmp(str,\"time\")!=0)\n            fprintf(fp2,\"%s \",str);\n    }\n    fclose(fp);\n    fclose(fp2);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "File Handling",
+      "year": 2065
+    },
+    {
+      "id": "C_2066_01",
+      "question": "Why is a flowchart required? Explain different symbols used in the flowchart with a suitable example.",
+      "answer": "Flowchart is required because:\na) It is a better way of communicating logic to all concerned.\nb) Problem can be analyzed more effectively.\nc) It acts as a guide during system analysis and program development.\nd) It helps in debugging.\n\nSymbols: Oval (Start/Stop), Parallelogram (Input/Output), Rectangle (Process), Diamond (Decision), Arrows (Flow lines). Example: Flowchart for finding largest of two numbers uses input, decision, and output symbols.",
+      "difficulty": "easy",
+      "topic": "Flowchart",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_02",
+      "question": "Determine which of the following are valid identifiers: record1, file_3, #tax, goto, name-and-address, void. Explain why invalid.",
+      "answer": "record1 → valid\nfile_3 → valid\n#tax → invalid (identifier must begin with letter or underscore, # not permitted)\ngoto → invalid (keyword cannot be used as identifier)\nname-and-address → invalid (hyphen not permitted)\nvoid → invalid (keyword cannot be used)",
+      "difficulty": "easy",
+      "topic": "Identifiers and Keywords",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_03",
+      "question": "Find the error in the given program and write the correct program: include<stdio.h> Include<math.h> main { Float p,r,n; printf(...); scanf(%f,&p): ... }",
+      "answer": "Errors: 'Include' should be '#include', 'math.h' needed, main missing return type, 'Float' should be 'float', missing & in scanf, missing quotes, wrong pow syntax.\nCorrected:\n#include<stdio.h>\n#include<math.h>\nvoid main() {\n    float p,r,n,f;\n    printf(\"Enter P:\"); scanf(\"%f\",&p);\n    printf(\"Enter R:\"); scanf(\"%f\",&r);\n    printf(\"Enter n:\"); scanf(\"%f\",&n);\n    f = pow((p + r/100), n);\n    printf(\"Final value: %f\\n\",f);\n}",
+      "difficulty": "medium",
+      "topic": "Debugging and Syntax",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_04",
+      "question": "Write a program using 'while' loop to compute and print sum of squares of first n numbers.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int i=0, n, sum=0;\n    printf(\"Enter number:\");\n    scanf(\"%d\",&n);\n    while(i<=n) {\n        sum = i*i + sum;\n        i++;\n    }\n    printf(\"\\nSum = %d\", sum);\n    getch();\n}",
+      "difficulty": "easy",
+      "topic": "Loops",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_05",
+      "question": "Write a program to enter two 3x3 matrices and calculate their product.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int a[3][3], b[3][3], c[3][3]={0}, i,j,k;\n    printf(\"Enter first matrix:\\n\");\n    for(i=0;i<3;i++)\n        for(j=0;j<3;j++)\n            scanf(\"%d\",&a[i][j]);\n    printf(\"Enter second matrix:\\n\");\n    for(i=0;i<3;i++)\n        for(j=0;j<3;j++)\n            scanf(\"%d\",&b[i][j]);\n    for(i=0;i<3;i++)\n        for(j=0;j<3;j++)\n            for(k=0;k<3;k++)\n                c[i][j] += a[i][k] * b[k][j];\n    printf(\"Product matrix:\\n\");\n    for(i=0;i<3;i++) {\n        for(j=0;j<3;j++)\n            printf(\"%d \",c[i][j]);\n        printf(\"\\n\");\n    }\n    getch();\n}",
+      "difficulty": "hard",
+      "topic": "Matrices",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_06",
+      "question": "Explain the concept of arrays and write a program to read and display a 2x2 matrix.",
+      "answer": "Array is a collection of similar data elements stored in contiguous memory locations. The data items arranged in horizontal direction are rows and vertical are columns.\n\n#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int A[2][2];\n    printf(\"Enter 2x2 matrix:\\n\");\n    for(int i=0;i<2;i++)\n        for(int j=0;j<2;j++)\n            scanf(\"%d\",&A[i][j]);\n    printf(\"Entered matrix:\\n\");\n    for(i=0;i<2;i++) {\n        for(j=0;j<2;j++)\n            printf(\"%3d\",A[i][j]);\n        printf(\"\\n\");\n    }\n    getch();\n}",
+      "difficulty": "easy",
+      "topic": "Arrays",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_07",
+      "question": "Write and test the power() function that returns x raised to power n, where n can be any integer: double power(double x, int p).",
+      "answer": "#include<stdio.h>\ndouble power(double x, int p);\nvoid main() {\n    double x;\n    int p;\n    for(x=2.0; x<=5.0; x++)\n        for(p=0; p<5; p++)\n            printf(\"%.2lf raised to %d = %.2lf\\n\", x, p, power(x,p));\n}\ndouble power(double x, int p) {\n    if(p==0) return 1;\n    else if(p>0) {\n        double result=1;\n        for(int i=0;i<p;i++) result *= x;\n        return result;\n    } else {\n        double result=1;\n        for(int i=0;i<-p;i++) result /= x;\n        return result;\n    }\n}",
+      "difficulty": "medium",
+      "topic": "Functions",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_09",
+      "question": "Why is a structure required? Write a program using structure of booklist with title, author, cost. Enter 4 books and calculate total cost.",
+      "answer": "A structure is required because it provides a means of grouping variables under a single name for easier handling and identification.\n\n#include<stdio.h>\n#include<conio.h>\nstruct book {\n    char title[50];\n    char author[50];\n    int cost;\n};\nvoid main() {\n    struct book b[4];\n    int i, sum=0;\n    for(i=0;i<4;i++) {\n        printf(\"Enter title: \"); gets(b[i].title);\n        printf(\"Enter author: \"); gets(b[i].author);\n        printf(\"Enter cost: \"); scanf(\"%d\",&b[i].cost);\n        sum += b[i].cost;\n    }\n    printf(\"Total cost = %d\", sum);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Structures",
+      "year": 2066
+    },
+    {
+      "id": "C_2066_10",
+      "question": "Create a text file and enter 'to write a good program is very time consuming job.' Create another text file containing reverse of above text.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\n#include<string.h>\nvoid main() {\n    FILE *fp, *f;\n    char str[]=\"To write a good program is very time consuming\";\n    int i;\n    fp=fopen(\"old.txt\",\"w\");\n    fputs(str,fp);\n    fclose(fp);\n    f=fopen(\"new.txt\",\"w\");\n    for(i=strlen(str)-1; i>=0; i--)\n        fputc(str[i],f);\n    fclose(f);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "File Handling",
+      "year": 2066
+    },
+    {
+      "id": "C_2067_01",
+      "question": "Draw the flowchart for solution of a quadratic equation and write algorithm. Explain it.",
+      "answer": "Algorithm:\nStep 1: Input a, b, c\nStep 2: d = sqrt(b*b - 4*a*c)\nStep 3: x1 = (-b + d)/(2*a)\nStep 4: x2 = (-b - d)/(2*a)\nStep 5: Print x1, x2\n\nFlowchart: Start → Input a,b,c → Compute discriminant → Check if d>=0 → Compute roots → Output roots → End",
+      "difficulty": "medium",
+      "topic": "Flowchart and Algorithm",
+      "year": 2067
+    },
+    {
+      "id": "C_2067_04",
+      "question": "Write a program to transpose a given matrix.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int matrix[10][10], transpose[10][10], r, c, i, j;\n    printf(\"Enter rows and columns: \");\n    scanf(\"%d %d\",&r,&c);\n    printf(\"Enter matrix elements:\\n\");\n    for(i=0;i<r;i++)\n        for(j=0;j<c;j++)\n            scanf(\"%d\",&matrix[i][j]);\n    for(i=0;i<r;i++)\n        for(j=0;j<c;j++)\n            transpose[j][i] = matrix[i][j];\n    printf(\"Transpose:\\n\");\n    for(i=0;i<c;i++) {\n        for(j=0;j<r;j++)\n            printf(\"%d \",transpose[i][j]);\n        printf(\"\\n\");\n    }\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Arrays and Matrices",
+      "year": 2067
+    },
+    {
+      "id": "C_2067_05",
+      "question": "Write a program that uses a do...while loop to compute and print the sum of squares of given n numbers.",
+      "answer": "#include<stdio.h>\nvoid main() {\n    int n, sum=0;\n    printf(\"Upto which number?:\");\n    scanf(\"%d\",&n);\n    do {\n        sum = sum + (n*n);\n        n--;\n    } while(n>0);\n    printf(\"sum=%d\",sum);\n    getch();\n}",
+      "difficulty": "easy",
+      "topic": "Loops",
+      "year": 2067
+    },
+    {
+      "id": "C_2067_06",
+      "question": "Write a function to multiply two n x n matrices.",
+      "answer": "#include<stdio.h>\nint main() {\n    int matrix1[3][3], matrix2[3][3], result[3][3]={0};\n    int i,j,k;\n    printf(\"Enter first matrix:\\n\");\n    for(i=0;i<3;i++)\n        for(j=0;j<3;j++)\n            scanf(\"%d\",&matrix1[i][j]);\n    printf(\"Enter second matrix:\\n\");\n    for(i=0;i<3;i++)\n        for(j=0;j<3;j++)\n            scanf(\"%d\",&matrix2[i][j]);\n    for(i=0;i<3;i++)\n        for(j=0;j<3;j++)\n            for(k=0;k<3;k++)\n                result[i][j] += matrix1[i][k] * matrix2[k][j];\n    printf(\"Result:\\n\");\n    for(i=0;i<3;i++) {\n        for(j=0;j<3;j++)\n            printf(\"%4d\",result[i][j]);\n        printf(\"\\n\");\n    }\n    return 0;\n}",
+      "difficulty": "hard",
+      "topic": "Functions and Matrices",
+      "year": 2067
+    },
+    {
+      "id": "C_2067_07",
+      "question": "Write a program to count the number of words in a sentence.",
+      "answer": "#include<stdio.h>\n#include<string.h>\nvoid main() {\n    int count=0, i, len;\n    char str[100];\n    printf(\"Enter sentence: \");\n    gets(str);\n    len = strlen(str);\n    for(i=0; i<len; i++) {\n        if(str[i]==' ') count++;\n    }\n    printf(\"Number of words: %d\", count+1);\n    getch();\n}",
+      "difficulty": "easy",
+      "topic": "String Manipulation",
+      "year": 2067
+    },
+    {
+      "id": "C_2067_08",
+      "question": "Why is pointer called jewel of C language? Write a program that uses pointers to copy an array of integers.",
+      "answer": "Pointers are called jewel of C because they allow direct memory access, dynamic memory allocation, efficient array/string handling, and function argument passing by reference. Many low-level operations are possible only through pointers.\n\n#include<stdio.h>\nvoid copy(int *source, int *dest, int n);\nvoid main() {\n    int arr1[] = {1,2,3,4,5};\n    int arr2[5];\n    copy(arr1, arr2, 5);\n    for(int i=0;i<5;i++) printf(\"%d \",arr2[i]);\n    getch();\n}\nvoid copy(int *source, int *dest, int n) {\n    for(int i=0;i<n;i++)\n        *(dest+i) = *(source+i);\n}",
+      "difficulty": "medium",
+      "topic": "Pointers",
+      "year": 2067
+    },
+    {
+      "id": "C_2067_09",
+      "question": "Define a structure of student having name, address, marks in C, marks in Information System. Take data for n students dynamically and find total marks obtained.",
+      "answer": "#include<stdio.h>\n#include<alloc.h>\nstruct student {\n    char name[50];\n    char address[50];\n    int marks_c;\n    int marks_is;\n};\nvoid main() {\n    struct student *p;\n    int i,n,total=0;\n    printf(\"Enter number of students: \");\n    scanf(\"%d\",&n);\n    p = (struct student*) calloc(n, sizeof(struct student));\n    for(i=0;i<n;i++) {\n        printf(\"Enter name: \"); gets((p+i)->name);\n        printf(\"Address: \"); gets((p+i)->address);\n        printf(\"Marks in C: \"); scanf(\"%d\",&(p+i)->marks_c);\n        printf(\"Marks in IS: \"); scanf(\"%d\",&(p+i)->marks_is);\n        total += (p+i)->marks_c + (p+i)->marks_is;\n    }\n    printf(\"Total marks obtained by all students: %d\", total);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Structures",
+      "year": 2067
+    },
+    {
+      "id": "C_2067_10",
+      "question": "Some text file is given; create another text file replacing 'Ram' to 'Hari', 'Sita' to 'Gita', 'Govinda' to 'Shiva'.",
+      "answer": "#include<stdio.h>\n#include<string.h>\nvoid main() {\n    FILE *ptr, *ptr1;\n    char word[30];\n    ptr = fopen(\"original.txt\",\"r\");\n    ptr1 = fopen(\"replace.txt\",\"w\");\n    while(fscanf(ptr,\"%s\",word) != EOF) {\n        if(strcmp(word,\"Ram\")==0) fprintf(ptr1,\"%s \",\"Hari\");\n        else if(strcmp(word,\"Sita\")==0) fprintf(ptr1,\"%s \",\"Gita\");\n        else if(strcmp(word,\"Govinda\")==0) fprintf(ptr1,\"%s \",\"Shiva\");\n        else fprintf(ptr1,\"%s \",word);\n    }\n    fclose(ptr);\n    fclose(ptr1);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "File Handling",
+      "year": 2067
+    },
+    {
+      "id": "C_2068_01",
+      "question": "Write an algorithm and flowchart to determine whether a given integer is odd or even and explain it.",
+      "answer": "Algorithm:\nStep 1: Start\nStep 2: Read a\nStep 3: r = a % 2\nStep 4: If r = 0 then Print 'Even' else Print 'Odd'\nStep 5: Stop\n\nExplanation: Read integer a, compute remainder when divided by 2. If remainder is 0, number is even otherwise odd.",
+      "difficulty": "easy",
+      "topic": "Flowchart and Algorithm",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_02",
+      "question": "How can you declare variables in C? Explain with example.",
+      "answer": "Variable declaration in C tells the compiler the variable name and what type of data it will hold.\nGeneral format: data_type v1, v2, ..., vn;\nExamples:\nint sum;\nint number, salary;\ndouble average, mean;\nchar grade;\nfloat price;",
+      "difficulty": "easy",
+      "topic": "Variables and Data Types",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_03",
+      "question": "Write a program to find the factorial of a given integer.",
+      "answer": "#include<stdio.h>\nint main() {\n    int i=1, f=1, num;\n    printf(\"Enter a number: \");\n    scanf(\"%d\",&num);\n    while(i <= num) {\n        f = f*i;\n        i++;\n    }\n    printf(\"Factorial of %d is %d\", num, f);\n    return 0;\n}",
+      "difficulty": "easy",
+      "topic": "Loops",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_04",
+      "question": "Explain switch statement with example.",
+      "answer": "Switch statement allows a program to select one statement for execution out of a set of alternatives. Only one case executes based on expression value.\n\nExample:\n#include<stdio.h>\nvoid main() {\n    int num1,num2,result;\n    char operator;\n    printf(\"Enter two numbers: \");\n    scanf(\"%d%d\",&num1,&num2);\n    printf(\"Enter operator: \");\n    scanf(\" %c\",&operator);\n    switch(operator) {\n        case '+': result = num1+num2; break;\n        case '-': result = num1-num2; break;\n        case '*': result = num1*num2; break;\n        default: printf(\"Unknown operator\"); result=0;\n    }\n    printf(\"%d\",result);\n}",
+      "difficulty": "medium",
+      "topic": "Control Statements",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_05",
+      "question": "Write a program to find the largest and smallest among the given elements in an array.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int a[10], i, big, small;\n    printf(\"Enter 10 elements: \");\n    for(i=0;i<10;i++) scanf(\"%d\",&a[i]);\n    big = small = a[0];\n    for(i=0;i<10;i++) {\n        if(big < a[i]) big = a[i];\n        if(small > a[i]) small = a[i];\n    }\n    printf(\"Largest = %d\\nSmallest = %d\", big, small);\n    getch();\n}",
+      "difficulty": "easy",
+      "topic": "Arrays",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_06",
+      "question": "Explain user-defined functions and their types with example.",
+      "answer": "User-defined functions are created by the programmer, not part of C library.\n\nTypes:\na) No arguments, no return value\nb) No arguments, with return value\nc) With arguments, with return value\nd) With arguments, no return value\n\nExample (with arguments, return value):\nint fact(int n) {\n    if(n<=1) return 1;\n    else return n*fact(n-1);\n}\nvoid main() {\n    int n=5;\n    printf(\"%d\", fact(n));\n}",
+      "difficulty": "medium",
+      "topic": "Functions",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_07",
+      "question": "Write a program to accept two numbers and sort them using pointers.",
+      "answer": "#include<stdio.h>\nvoid main() {\n    int x, y, *a, *b, temp;\n    printf(\"Enter x and y: \");\n    scanf(\"%d%d\",&x,&y);\n    a = &x;\n    b = &y;\n    if(*a > *b) {\n        temp = *a;\n        *a = *b;\n        *b = temp;\n    }\n    printf(\"Sorted: x=%d, y=%d\", x, y);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Pointers",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_08",
+      "question": "Explain passing structure to function with example.",
+      "answer": "Passing structure to function allows sending entire structure as argument instead of individual members.\n\nExample:\n#include<stdio.h>\nstruct employee {\n    int id;\n    char name[25];\n    float salary;\n};\nvoid display(struct employee e);\nvoid main() {\n    struct employee emp1 = {12, \"Nitesh\", 7500};\n    display(emp1);\n}\nvoid display(struct employee e) {\n    printf(\"%d %s %f\", e.id, e.name, e.salary);\n}",
+      "difficulty": "medium",
+      "topic": "Structures",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_09",
+      "question": "Write a program to accept a number and print sum of digits using recursive function.",
+      "answer": "#include<stdio.h>\nint sumdigits(int n);\nvoid main() {\n    int n;\n    printf(\"Enter number: \");\n    scanf(\"%d\",&n);\n    printf(\"Sum of digits = %d\\n\", sumdigits(n));\n    getch();\n}\nint sumdigits(int n) {\n    if(n == 0) return 0;\n    return (n%10) + sumdigits(n/10);\n}",
+      "difficulty": "medium",
+      "topic": "Recursion",
+      "year": 2068
+    },
+    {
+      "id": "C_2068_10",
+      "question": "Explain pointer to structure with example.",
+      "answer": "Pointer to structure stores address of structure variable, allowing efficient access and modification.\n\nExample:\nstruct product {\n    char name[30];\n    int manufac;\n    float net;\n} item[2], *ptr;\nptr = item; // points to 0th element\n// Access members:\nptr->name, ptr->manufac, ptr->net\n\nExample program:\nptr = &item[0];\nprintf(\"%s\", ptr->name);\nptr->manufac = 2023;",
+      "difficulty": "medium",
+      "topic": "Structures and Pointers",
+      "year": 2068
+    },
+    {
+      "id": "C_2069_01",
+      "question": "Write an algorithm and flowchart to find whether a given integer is zero, positive, or negative.",
+      "answer": "Algorithm:\nStep 1: Start\nStep 2: Read number n\nStep 3: If n > 0 then Print 'Positive'\nStep 4: Else if n < 0 then Print 'Negative'\nStep 5: Else Print 'Zero'\nStep 6: Stop\n\nFlowchart: Start → Input n → Decision diamond (n>0?) → Yes→Positive → No→Decision (n<0?) → Yes→Negative → No→Zero → End.",
+      "difficulty": "easy",
+      "topic": "Flowchart and Algorithm",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_02",
+      "question": "What are the four basic data types in C? What are their size and range?",
+      "answer": "Four basic data types in C:\n\n1. int: size 2 bytes, range -32768 to 32767\n2. char: size 1 byte, range -128 to 127\n3. float: size 4 bytes, range 3.4e-38 to 3.4e+38\n4. double: size 8 bytes, range 1.7e-308 to 1.7e+308\n\nint: integer values without decimal points\nfloat: decimal point values, single precision\ndouble: double precision floating point\nchar: single character storage",
+      "difficulty": "easy",
+      "topic": "Data Types",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_03",
+      "question": "Explain if...else statement with example.",
+      "answer": "if...else is a conditional statement that executes one block if condition is TRUE and another block if FALSE.\n\nExample:\n#include<stdio.h>\nvoid main() {\n    int a, b;\n    printf(\"Enter two numbers: \");\n    scanf(\"%d%d\",&a,&b);\n    if(a > b)\n        printf(\"%d is larger\", a);\n    else\n        printf(\"%d is larger\", b);\n}",
+      "difficulty": "easy",
+      "topic": "Control Statements",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_04",
+      "question": "Differentiate between break and exit statement with example.",
+      "answer": "Break vs Exit:\n\nBreak:\n- Used to exit from loop or switch\n- Part of language syntax, not a function\n- Exits current construct only (loop/switch)\n\nExit:\n- Used to exit entire program\n- Library function (stdlib.h)\n- Returns control to operating system\n\nExample break:\nfor(i=0;i<10;i++) {\n    if(i==5) break; // exits loop\n}\n\nExample exit:\nif(error) exit(0); // terminates program immediately",
+      "difficulty": "medium",
+      "topic": "Control Statements",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_05",
+      "question": "Explain multidimensional array with example. Write program to convert lowercase string to uppercase.",
+      "answer": "Multidimensional array: array with more than one subscript. 2D array declaration: data_type array_name[row_size][column_size];\n\nExample: int table[2][3] = {{0,0,0},{1,1,1}};\n\nProgram to convert lowercase to uppercase:\n#include<stdio.h>\n#include<string.h>\nvoid main() {\n    char str[25];\n    printf(\"Enter string: \");\n    gets(str);\n    strupr(str);\n    printf(\"Uppercase: %s\", str);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Arrays and Strings",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_06",
+      "question": "Explain library functions with example.",
+      "answer": "Library functions are pre-written functions provided by C standard library for common tasks like I/O, math, string handling. Header files are required to use them.\n\nTypes:\na) Built-in library functions (printf, scanf)\nb) User-defined library functions (created by programmer)\n\nExample:\n#include<stdio.h>\nvoid display() {\n    printf(\"Hello World\");\n}\nvoid main() {\n    display();\n}\nOutput: Hello World",
+      "difficulty": "easy",
+      "topic": "Functions",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_07",
+      "question": "Write a program to find sum of all elements of an array using pointers.",
+      "answer": "#include<stdio.h>\n#include<conio.h>\nvoid main() {\n    int arr[10], sum=0, i;\n    int *ptr;\n    ptr = arr;\n    printf(\"Enter 10 values: \");\n    for(i=0;i<10;i++)\n        scanf(\"%d\", ptr+i);\n    for(i=0;i<10;i++)\n        sum = sum + *(ptr+i);\n    printf(\"Sum = %d\", sum);\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Pointers",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_08",
+      "question": "Explain pointer arithmetic with example.",
+      "answer": "Pointer arithmetic allows addition/subtraction of integers from pointers, subtraction of one pointer from another, and comparison of pointers.\n\nExample:\n#include<stdio.h>\nvoid main() {\n    int arr[] = {10,20,30,40,50};\n    int *ptr = arr;\n    printf(\"*ptr = %d\\n\", *ptr);      // 10\n    ptr++;\n    printf(\"After ptr++: %d\\n\", *ptr); // 20\n    ptr+=2;\n    printf(\"After ptr+=2: %d\\n\", *ptr); // 40\n    int *ptr2 = &arr[4];\n    printf(\"Difference: %d\", ptr2 - ptr); // 1\n}",
+      "difficulty": "medium",
+      "topic": "Pointers",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_09",
+      "question": "Explain array of structures and write a program to accept record of 15 persons with name, age, address and display them.",
+      "answer": "Array of structure allows storing multiple records of same structure type.\n\nDeclaration: struct student s[100];\n\nProgram:\n#include<stdio.h>\nstruct person {\n    char name[20];\n    int age;\n    char address[25];\n} p[15];\nvoid main() {\n    int i;\n    printf(\"Enter name, age, address of 15 persons:\\n\");\n    for(i=0;i<15;i++) {\n        scanf(\"%s %d %s\", p[i].name, &p[i].age, p[i].address);\n    }\n    printf(\"\\nDetails entered:\\n\");\n    for(i=0;i<15;i++) {\n        printf(\"%s %d %s\\n\", p[i].name, p[i].age, p[i].address);\n    }\n    getch();\n}",
+      "difficulty": "medium",
+      "topic": "Structures",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_10",
+      "question": "What are the three types of input/output functions in C programming? Explain with example.",
+      "answer": "Three types of I/O functions in C:\n\na) Basic I/O functions: getchar(), putchar(), gets(), puts()\nExample: char ch = getchar(); putchar(ch);\n\nb) Formatted I/O functions: printf(), scanf()\nExample: printf(\"%d\",x); scanf(\"%d\",&x);\n\nc) Non-formatted I/O functions: fread(), fwrite() for file I/O\nExample: fread(&var, sizeof(var), 1, fp);",
+      "difficulty": "medium",
+      "topic": "Input/Output",
+      "year": 2069
+    },
+    {
+      "id": "C_2069_OR_10",
+      "question": "Explain delimiters and graphics functions in C.",
+      "answer": "Delimiters: A delimiter is a sequence of one or more characters used to specify boundary between separate independent regions in text or data strings. Example: comma character as field delimiter in CSV.\n\nGraphics functions in C: Used to implement graphical symbols and shapes.\n\nExamples:\n- putpixel(x, y, color): puts a dot at (x,y)\n- line(x1,y1,x2,y2): draws line from (x1,y1) to (x2,y2)\n- circle(x,y,r): draws circle with center (x,y) and radius r\n- arc(x,y,stangle,endangle,radius): draws arc\n\nExample program:\n#include<graphics.h>\nvoid main() {\n    int gd=DETECT, gm;\n    initgraph(&gd,&gm,\"c:\\\\tc\\\\bgi\");\n    circle(200,100,10);\n    setcolor(WHITE);\n    getch();\n    closegraph();\n}",
+      "difficulty": "medium",
+      "topic": "Graphics",
+      "year": 2069
+    }
+  ]
+}

@@ -1,0 +1,406 @@
+{
+  "subject": "Mathematics_I",
+  "semester": 1,
+  "qa_pairs": [
+    {
+      "id": "MATH_2065_01",
+      "question": "Verify Rolle's theorem for the function f(x) = x³/3 - 3x on the interval [-3,3].",
+      "answer": "Given f(x) = x³/3 - 3x on [-3,3].\n\nf(-3) = (-27)/3 - 3(-3) = -9 + 9 = 0\nf(3) = 27/3 - 9 = 9 - 9 = 0\n\nf'(x) = (3x²)/3 - 3 = x² - 3\nSet f'(c) = 0 → c² - 3 = 0 → c = √3 or c = -√3\nBoth c = ±√3 lie in (-3,3).\nThus Rolle's theorem is verified.",
+      "difficulty": "medium",
+      "topic": "Mean Value Theorems",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_02",
+      "question": "Obtain the area between two curves y = sec² x and y = sin x from x = 0 to x = π/4.",
+      "answer": "Area A = ∫₀^{π/4} (sec² x - sin x) dx\n= [tan x + cos x]₀^{π/4}\n= [tan(π/4) + cos(π/4)] - [tan 0 + cos 0]\n= [1 + 1/√2] - [0 + 1]\n= 1/√2 square units.",
+      "difficulty": "medium",
+      "topic": "Area Between Curves",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_03",
+      "question": "Test the convergence of the p-series Σ 1/n^p for p>1 using integral test.",
+      "answer": "For p>1, f(x)=1/x^p is positive decreasing on [1,∞).\n∫₁^∞ x^{-p} dx = lim_{b→∞} [x^{-p+1}/(-p+1)]₁^b\n= 1/(p-1) lim_{b→∞} (1/b^{p-1} - 1) = 1/(p-1) (0 - 1) = 1/(p-1).\nSince integral converges, the series converges by integral test.",
+      "difficulty": "medium",
+      "topic": "Infinite Series",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_04",
+      "question": "Find the eccentricity of the hyperbola 9x² - 16y² = 144.",
+      "answer": "Divide by 144: x²/16 - y²/9 = 1 → a²=16, a=4; b²=9, b=3.\nc = √(a²+b²) = √(16+9) = √25 = 5.\nEccentricity e = c/a = 5/4 = 1.25.",
+      "difficulty": "easy",
+      "topic": "Conic Sections",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_05",
+      "question": "Find a vector perpendicular to the plane of points P(1,-1,0), Q(2,1,-1), R(-1,1,2).",
+      "answer": "PQ = (1,2,-1), PR = (-2,2,2).\nPerpendicular vector = PQ × PR = det|i j k; 1 2 -1; -2 2 2|\n= i(2×2 - (-1)×2) - j(1×2 - (-1)×(-2)) + k(1×2 - 2×(-2))\n= i(4+2) - j(2-2) + k(2+4) = 6i + 0j + 6k = (6,0,6).",
+      "difficulty": "medium",
+      "topic": "Vectors",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_06",
+      "question": "Find the area enclosed by the curve r² = 4 cos 2θ.",
+      "answer": "Area = 4∫₀^{π/4} ½ r² dθ = 2∫₀^{π/4} 4 cos 2θ dθ\n= 8 [sin 2θ / 2]₀^{π/4} = 4 [sin(π/2) - sin 0] = 4(1-0)=4 square units.",
+      "difficulty": "hard",
+      "topic": "Polar Coordinates",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_07",
+      "question": "Obtain ∂f/∂x and ∂f/∂y at (4,-5) if f(x,y)=x²+3xy+y-1.",
+      "answer": "∂f/∂x = 2x + 3y → at (4,-5): 2(4)+3(-5)=8-15=-7.\n∂f/∂y = 3x + 1 → at (4,-5): 3(4)+1=12+1=13.",
+      "difficulty": "easy",
+      "topic": "Partial Derivatives",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_08",
+      "question": "Using partial derivatives, find dy/dx if x² + cos y - y² = 0.",
+      "answer": "Let F(x,y)=x²+cos y-y².\nF_x = 2x, F_y = -sin y - 2y.\ndy/dx = -F_x/F_y = -2x / (-sin y-2y) = 2x/(sin y+2y).",
+      "difficulty": "medium",
+      "topic": "Implicit Differentiation",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_09",
+      "question": "Find the partial differential equation of (x-a)²+(y-b)²+z²=c².",
+      "answer": "Differentiate w.r.t x: 2(x-a)+2z p=0 → a=x+zp.\nDifferentiate w.r.t y: 2(y-b)+2z q=0 → b=y+zq.\nSubstitute back: (x-x-zp)²+(y-y-zq)²+z²=c²\n→ z²p²+z²q²+z²=c² → z²(p²+q²+1)=c².",
+      "difficulty": "hard",
+      "topic": "Partial Differential Equations",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_10",
+      "question": "Solve the PDE x² p + q = z².",
+      "answer": "P=x², Q=1, R=z².\ndx/x² = dy/1 → -1/x = y + c₁ → c₁ = y + 1/x.\ndy/1 = dz/z² → y = -1/z + c₂ → c₂ = y + 1/z.\nGeneral solution: F(y+1/x, y+1/z)=0.",
+      "difficulty": "hard",
+      "topic": "Partial Differential Equations",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2066_01",
+      "question": "Find the length of the curve y = x^{3/2} from x=0 to x=4.",
+      "answer": "dy/dx = (3/2)x^{1/2} → (dy/dx)² = 9x/4.\nL = ∫₀⁴ √(1+9x/4) dx = ∫₀⁴ (1+9x/4)^{1/2} dx\n= [ (1+9x/4)^{3/2} / ((3/2)(9/4)) ]₀⁴\n= (8/27)[(1+9)^{3/2} - 1] = (8/27)[10^{3/2} - 1] = (8/27)(10√10 - 1).",
+      "difficulty": "medium",
+      "topic": "Arc Length",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_02",
+      "question": "Find the critical points of f(x)=x^{3/2}(x-4).",
+      "answer": "f(x)=x^{5/2} - 4x^{3/2}.\nf'(x)= (5/2)x^{3/2} - (12/2)x^{1/2} = (5/2)x^{3/2} - 6x^{1/2}\n= x^{1/2}[(5/2)x - 6].\nSet f'(x)=0 → x=0 or (5/2)x-6=0 → x=12/5.\nCritical points: x=0, x=12/5.",
+      "difficulty": "medium",
+      "topic": "Applications of Derivatives",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_03",
+      "question": "Does the series Σ 1/n² converge?",
+      "answer": "Yes, by p-series test with p=2>1, the series converges. Also by integral test: ∫₁^∞ 1/x² dx = 1, finite.",
+      "difficulty": "easy",
+      "topic": "Infinite Series",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_04",
+      "question": "Find the polar equation of the circle (x+2)²+y²=4.",
+      "answer": "x²+4x+4+y²=4 → x²+y²+4x=0 → r² + 4r cos θ = 0 → r(r+4cosθ)=0 → r = -4cosθ.",
+      "difficulty": "medium",
+      "topic": "Polar Coordinates",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_05",
+      "question": "Find the area of the parallelogram with vertices A(0,0), B(7,3), C(9,8), D(2,5).",
+      "answer": "AB = (7,3), AD = (2,5).\nArea = |AB × AD| = |7×5 - 3×2| = |35-6| = 29 square units.",
+      "difficulty": "medium",
+      "topic": "Vectors",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_06",
+      "question": "Evaluate the limit: lim_{(x,y)→(0,0)} (x² - xy)/(√x - √y).",
+      "answer": "Multiply numerator and denominator: (x²-xy)/(√x-√y) = x(x-y)/(√x-√y) = x(√x+√y)(√x-√y)/(√x-√y) = x(√x+√y).\nLimit = lim x(√x+√y) = 0.",
+      "difficulty": "hard",
+      "topic": "Limits",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_07",
+      "question": "Find ∂ω/∂x with y,z constant if ω=x²+y-z+sin t and x+y=t.",
+      "answer": "∂ω/∂x = 2x + (∂(sin t)/∂t)(∂t/∂x) = 2x + cos t × 1 = 2x + cos(x+y).",
+      "difficulty": "medium",
+      "topic": "Partial Derivatives",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_08",
+      "question": "Solve the PDE p + q = x.",
+      "answer": "dx/1 = dy/1 = dz/x.\nFrom dx=dy: x = y + c₁ → c₁ = x-y.\nFrom dx = dz/x: x dx = dz → x²/2 = z + c₂ → c₂ = x²/2 - z.\nGeneral solution: F(x-y, x²/2 - z)=0.",
+      "difficulty": "hard",
+      "topic": "Partial Differential Equations",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2066_09",
+      "question": "Find the unit tangent vector of the curve r(t)=(cos t + t sin t)i + (sin t - t cos t)j, t>0.",
+      "answer": "v = dr/dt = (-sin t+sin t+t cos t)i + (cos t - cos t + t sin t)j = (t cos t)i + (t sin t)j.\n|v| = √(t²cos²t + t²sin²t) = t.\nT = v/|v| = cos t i + sin t j.",
+      "difficulty": "medium",
+      "topic": "Vector Calculus",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2067_01",
+      "question": "Define a relation and a function from a set into another set with suitable examples.",
+      "answer": "Relation: Any subset of Cartesian product A×B. Example: R={(x,y): x+y≥5}.\nFunction: A relation where each element of A associates with a unique element of B. Example: f(x)=2x+5.",
+      "difficulty": "easy",
+      "topic": "Sets and Functions",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2067_02",
+      "question": "Show that the series Σ 1/n² converges using integral test.",
+      "answer": "f(x)=1/x² is positive decreasing on [1,∞).\n∫₁^∞ 1/x² dx = [-1/x]₁^∞ = 0 - (-1) = 1.\nSince the integral converges, the series converges.",
+      "difficulty": "medium",
+      "topic": "Infinite Series",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2067_03",
+      "question": "Investigate convergence of Σ (2^n + 5)/3^n.",
+      "answer": "a_n = (2^n+5)/3^n = (2/3)^n + 5/3^n.\nBoth (2/3)^n and 5/3^n are geometric series with |r|<1. Sum of two convergent series converges.",
+      "difficulty": "medium",
+      "topic": "Infinite Series",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2067_04",
+      "question": "Find foci, vertices, center of ellipse x²/16 + y²/9 = 1.",
+      "answer": "a²=16→a=4, b²=9→b=3.\nc=√(a²-b²)=√(16-9)=√7.\nCenter: (0,0). Vertices: (±4,0). Foci: (±√7,0).",
+      "difficulty": "easy",
+      "topic": "Conic Sections",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2067_05",
+      "question": "Find the equation for the plane through (-3,0,7) perpendicular to n = 5i+2j-k.",
+      "answer": "Equation: 5(x+3)+2(y-0)+(-1)(z-7)=0\n→ 5x+15+2y-z+7=0 → 5x+2y-z+22=0\nor 5x+2y-z=-22.",
+      "difficulty": "easy",
+      "topic": "3D Geometry",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2067_06",
+      "question": "Find cylindrical equation for the cylinder 4x²+4y²=9.",
+      "answer": "x=r cos θ, y=r sin θ.\n4(r²cos²θ)+4(r²sin²θ)=9 → 4r²(cos²θ+sin²θ)=9 → 4r²=9 → r=3/2.",
+      "difficulty": "easy",
+      "topic": "Coordinate Systems",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2067_07",
+      "question": "Find the length of the cardioid r = 1 - cos θ.",
+      "answer": "r²+(dr/dθ)² = (1-cosθ)²+sin²θ = 2-2cosθ = 4 sin²(θ/2).\nL = ∫₀^{2π} √[r²+(dr/dθ)²] dθ = ∫₀^{2π} 2|sin(θ/2)| dθ\n= 2∫₀^{2π} sin(θ/2) dθ = 2[-2cos(θ/2)]₀^{2π} = 2[-2cosπ + 2cos0] = 2[2+2]=8.",
+      "difficulty": "hard",
+      "topic": "Polar Coordinates",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2068_01",
+      "question": "Define one-to-one and onto function with suitable examples.",
+      "answer": "One-to-one (injective): Different elements in A have different images. Example: f(x)=2x.\nOnto (surjective): Every element in B has a preimage in A. Example: f(x)=x-1 on R.\nBijective: Both one-to-one and onto.",
+      "difficulty": "easy",
+      "topic": "Sets and Functions",
+      "year": 2068
+    },
+    {
+      "id": "MATH_2068_02",
+      "question": "Find the focus and directrix of the parabola y²=10x.",
+      "answer": "y²=4ax → 4a=10 → a=2.5.\nFocus = (a,0) = (2.5,0).\nDirectrix: x = -a = -2.5 → x+2.5=0 → 2x+5=0.",
+      "difficulty": "easy",
+      "topic": "Conic Sections",
+      "year": 2068
+    },
+    {
+      "id": "MATH_2068_03",
+      "question": "Find intersection of line x=8/3+2t, y=-2t, z=1+t with plane 3x+2y+6z=6.",
+      "answer": "Substitute: 3(8/3+2t) + 2(-2t) + 6(1+t) = 6\n→ 8+6t -4t +6+6t = 6 → 8t+14=6 → 8t=-8 → t=-1.\nPoint: (8/3-2, 2, 1-1) = (2/3, 2, 0).",
+      "difficulty": "medium",
+      "topic": "3D Geometry",
+      "year": 2068
+    },
+    {
+      "id": "MATH_2068_04",
+      "question": "Find spherical coordinate equation for sphere x²+y²+(z-1)²=1.",
+      "answer": "x=ρ sin φ cos θ, y=ρ sin φ sin θ, z=ρ cos φ.\nρ² sin²φ + (ρ cos φ -1)² = 1\n→ ρ² sin²φ + ρ² cos²φ - 2ρ cos φ +1 = 1\n→ ρ² - 2ρ cos φ = 0 → ρ(ρ-2cos φ)=0 → ρ=2cos φ.",
+      "difficulty": "hard",
+      "topic": "Coordinate Systems",
+      "year": 2068
+    },
+    {
+      "id": "MATH_2068_05",
+      "question": "Find area bounded by y=x and y=x² in first quadrant using double integral.",
+      "answer": "A = ∫₀¹ ∫_{x²}^x dy dx = ∫₀¹ (x-x²) dx = [x²/2 - x³/3]₀¹ = 1/2 - 1/3 = 1/6.",
+      "difficulty": "medium",
+      "topic": "Double Integrals",
+      "year": 2068
+    },
+    {
+      "id": "MATH_2068_06",
+      "question": "Show that the function f(x,y)=2xy/(x²+y²) for (x,y)≠(0,0) and f(0,0)=0 is discontinuous at origin.",
+      "answer": "Approach along y=mx: f(x,mx)=2m/(1+m²). Limit depends on m, so no unique limit. Hence discontinuous.",
+      "difficulty": "hard",
+      "topic": "Limits and Continuity",
+      "year": 2068
+    },
+    {
+      "id": "MATH_2069_01",
+      "question": "Verify the mean value theorem for f(x)=√[x(x-1)] on [0,1].",
+      "answer": "f(0)=0, f(1)=0.\nf'(x)= (2x-1)/(2√[x(x-1)]).\nMVT: f'(c)= [f(1)-f(0)]/(1-0)=0 → 2c-1=0 → c=1/2 ∈ (0,1). Verified.",
+      "difficulty": "medium",
+      "topic": "Mean Value Theorems",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_02",
+      "question": "Find length of curve y=(4√2/3)x^{3/2}-1 from x=0 to x=1.",
+      "answer": "dy/dx = (4√2/3)×(3/2)x^{1/2} = 2√2 x^{1/2}.\n(dy/dx)² = 8x.\nL = ∫₀¹ √(1+8x) dx = [ (1+8x)^{3/2} / (8×(3/2)) ]₀¹ = [ (1+8x)^{3/2}/12 ]₀¹ = (27^{3/2}-1)/12 = (27√27 - 1)/12.",
+      "difficulty": "medium",
+      "topic": "Arc Length",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_03",
+      "question": "Test convergence of Σ 1/n! by comparison test.",
+      "answer": "For n≥4, 1/n! ≤ 1/2^{n-1} (since n! grows faster). Σ 1/2^{n-1} converges (geometric). By comparison test, Σ 1/n! converges.",
+      "difficulty": "medium",
+      "topic": "Infinite Series",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_04",
+      "question": "Find semi-major axis, semi-minor axis, foci, vertices of x²/25 + y²/16 = 1.",
+      "answer": "a²=25→a=5, b²=16→b=4, c=√(25-16)=3.\nSemi-major axis a=5, semi-minor b=4.\nFoci: (±3,0), Vertices: (±5,0), Center: (0,0).",
+      "difficulty": "easy",
+      "topic": "Conic Sections",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_05",
+      "question": "Find angle between vectors 2i+j+k and -4i+3j+k.",
+      "answer": "u·v = (2)(-4)+(1)(3)+(1)(1) = -8+3+1=-4.\n|u|=√(4+1+1)=√6, |v|=√(16+9+1)=√26.\ncos θ = -4/(√156)= -4/(2√39)= -2/√39.\nθ = cos⁻¹(-2/√39) ≈ 108.68°.",
+      "difficulty": "medium",
+      "topic": "Vectors",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_06",
+      "question": "Find area bounded by y=x and y=x² in first quadrant.",
+      "answer": "A = ∫₀¹ (x - x²) dx = [x²/2 - x³/3]₀¹ = 1/2 - 1/3 = 1/6.",
+      "difficulty": "easy",
+      "topic": "Area Between Curves",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_07",
+      "question": "Find Maclaurin series for f(x)=e^{-x}.",
+      "answer": "f(0)=1, f'(0)=-1, f''(0)=1, f'''(0)=-1,...\nThus e^{-x} = Σ_{n=0}^∞ (-1)^n x^n / n! = 1 - x + x²/2! - x³/3! + ...",
+      "difficulty": "medium",
+      "topic": "Taylor/Maclaurin Series",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_08",
+      "question": "Find area enclosed by cardioid r=2(1+cos θ).",
+      "answer": "Area = ½ ∫₀^{2π} [2(1+cosθ)]² dθ = 2 ∫₀^{2π} (1+2cosθ+cos²θ) dθ\n= 2[θ + 2sinθ + (θ/2 + sin2θ/4)]₀^{2π}\n= 2[2π + 0 + π] = 6π square units.",
+      "difficulty": "hard",
+      "topic": "Polar Coordinates",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_09",
+      "question": "Find the particular integral of (D² - D')z = 2y - x².",
+      "answer": "PI = 1/(D²-D') (2y-x²) = 1/D² [1 - D'/D²]⁻¹ (2y-x²)\n= 1/D² [ (2y-x²) + (1/D²)D'(2y-x²) ]\n= 1/D² (2y-x²) + 2/D⁴\n= 2y·x²/2 - x⁴/12 + 2·x⁴/24\n= x²y - x⁴/12 + x⁴/12 = x²y.",
+      "difficulty": "hard",
+      "topic": "Partial Differential Equations",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_10",
+      "question": "Verify that z = f(x+ct)+g(x-ct) satisfies the wave equation.",
+      "answer": "Let u=x+ct, v=x-ct. Then ∂²z/∂x² = f''(u)+g''(v).\n∂²z/∂t² = c²f''(u) + c²g''(v) = c²[ f''(u)+g''(v) ] = c²∂²z/∂x².\nThus ∂²z/∂t² = c²∂²z/∂x², satisfying the wave equation.",
+      "difficulty": "hard",
+      "topic": "Partial Differential Equations",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2069_11",
+      "question": "Find local extreme values of f(x,y)=x²+xy+y²+3x-3y+4.",
+      "answer": "f_x = 2x+y+3=0, f_y = x+2y-3=0.\nSolve: Multiply first by 2: 4x+2y+6=0, subtract second: 3x+9=0→x=-3, then y=3.\nf_xx=2>0, f_yy=2, f_xy=1, D=4-1=3>0 → local minimum.\nf(-3,3)=9-9+9-9+9+4=13? Wait compute: 9-9=0+9=9-9=0+9=9+4=13. But original solution gave -5 — recalc: x²=9, xy= -9, y²=9, 3x=-9, -3y=-9, +4 → 9-9+9-9-9+4 = (9-9)=0, +9=9, -9=0, -9=-9, +4=-5. Yes -5 is correct.",
+      "difficulty": "hard",
+      "topic": "Multivariable Calculus",
+      "year": 2069
+    },
+    {
+      "id": "MATH_2065_11",
+      "question": "State and prove the Mean Value Theorem for a differentiable function.",
+      "answer": "Statement: If f is continuous on [a,b] and differentiable on (a,b), then ∃c∈(a,b) such that f(b)-f(a)=f'(c)(b-a).\nProof: Define h(x)=f(x)(b-a)-x(f(b)-f(a)). h(a)=h(b). By Rolle's theorem, ∃c∈(a,b) with h'(c)=0 → f'(c)(b-a)-(f(b)-f(a))=0 → f(b)-f(a)=f'(c)(b-a).",
+      "difficulty": "medium",
+      "topic": "Mean Value Theorems",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_12",
+      "question": "Find length of asteroid x=cos³t, y=sin³t for 0≤t≤2π.",
+      "answer": "dx/dt = -3cos²t sin t, dy/dt = 3sin²t cos t.\n(dx/dt)²+(dy/dt)² = 9cos⁴t sin²t + 9sin⁴t cos²t = 9cos²t sin²t(cos²t+sin²t)=9cos²t sin²t.\nL = ∫₀^{2π} 3|cos t sin t| dt = 12∫₀^{π/2} 3 cos t sin t dt? Actually 4×∫₀^{π/2} 3 sin t cos t dt = 4×3×1/2=6.",
+      "difficulty": "hard",
+      "topic": "Arc Length",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2065_13",
+      "question": "Define curvature of a curve. Prove curvature of circle radius a is 1/a.",
+      "answer": "Curvature k = |dT/ds|. For circle r(θ)=(a cos θ, a sin θ), s=aθ, T=(-sin θ, cos θ).\ndT/ds = (dT/dθ)/(ds/dθ) = (-cos θ, -sin θ)/a. |dT/ds|=1/a.",
+      "difficulty": "hard",
+      "topic": "Curvature",
+      "year": 2065
+    },
+    {
+      "id": "MATH_2066_10",
+      "question": "Find general integral of z(xp - yq) = y² - x².",
+      "answer": "P=zx, Q=-zy, R=y²-x².\ndx/(zx) = dy/(-zy) → dx/x = -dy/y → ln x = -ln y + ln c₁ → xy=c₁.\nAlso (dx-dy)/[z(x-y)] = dz/(y²-x²) → d(x-y)/[z(x-y)] = -dz/[(x-y)(x+y)] → (x+y)d(x-y) = -z dz → (x-y)²/2 = -z²/2 + c₂.\nGeneral solution: F(xy, (x-y)²+z²)=0.",
+      "difficulty": "hard",
+      "topic": "Partial Differential Equations",
+      "year": 2066
+    },
+    {
+      "id": "MATH_2067_08",
+      "question": "Calculate curvature and torsion of helix r(t)=(a cos t, a sin t, bt).",
+      "answer": "v = (-a sin t, a cos t, b), |v|=√(a²+b²).\nT = v/|v|.\ndT/dt = (-a cos t, -a sin t, 0)/√(a²+b²).\nk = |dT/ds| = a/(a²+b²).\nFor torsion: Compute (v×a)·da/dt / |v×a|² = b/(a²+b²).",
+      "difficulty": "hard",
+      "topic": "Vector Calculus",
+      "year": 2067
+    },
+    {
+      "id": "MATH_2068_07",
+      "question": "Find volume enclosed by z=x²+3y² and z=8-x²-y².",
+      "answer": "Intersection: x²+3y²=8-x²-y² → 2x²+4y²=8 → x²+2y²=4.\nVolume = ∫∫_{x²+2y²≤4} [(8-x²-y²)-(x²+3y²)] dA = ∫∫ (8-2x²-4y²) dA.\nUse x=2r cos θ, y=√2 r sin θ, Jacobian=2√2 r. Then integrate r from 0 to 1, θ 0 to 2π → V=8√2 π.",
+      "difficulty": "hard",
+      "topic": "Multiple Integrals",
+      "year": 2068
+    },
+    {
+      "id": "MATH_2069_12",
+      "question": "Define principal unit normal vector. Find unit tangent and principal normal for r(t)=(cos t, sin t, t).",
+      "answer": "T = v/|v| = (-sin t, cos t, 1)/√2.\nN = (dT/dt)/|dT/dt| = (-cos t, -sin t, 0)/1 = (-cos t, -sin t, 0).",
+      "difficulty": "medium",
+      "topic": "Vector Calculus",
+      "year": 2069
+    }
+  ]
+}

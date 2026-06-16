@@ -1,0 +1,103 @@
+MTH112 - Mathematics I
+
+Course Title: Mathematics I
+Course No: MTH112
+Nature of Course: Theory
+Semester: I
+Credit Hours: 3
+
+Full Marks: 80 + 20
+Pass Marks: 32 + 8
+
+Course Description
+
+This course covers the concepts of functions, limits, continuity, differentiation, integration of functions of one variable, logarithmic and exponential functions, applications of derivatives and antiderivatives, differential equations, vectors and their applications, partial derivatives, and multiple integrals.
+
+Course Objectives
+
+The objectives of this course are to enable students to:
+
+Understand and formulate real-world problems into mathematical statements.
+Develop solutions to mathematical problems at a level appropriate to the course.
+Describe or demonstrate mathematical solutions numerically or graphically.
+Course Contents
+Unit 1: Function of One Variable (5 Hrs.)
+Four Ways of Representing a Function
+Linear Mathematical Model
+Polynomial Functions
+Rational Functions
+Trigonometric Functions
+Exponential Functions
+Logarithmic Functions
+Combination of Functions
+Domain and Range of Functions
+Graphs of Functions
+Unit 2: Limits and Continuity (4 Hrs.)
+Precise Definition of Limit
+Limits at Infinity
+Continuity
+Horizontal Asymptotes
+Vertical Asymptotes
+Slant Asymptotes
+Unit 3: Derivatives (4 Hrs.)
+Tangents and Velocity
+Rate of Change
+Review of Derivative
+Differentiability of a Function
+Mean Value Theorem
+Indeterminate Forms
+L’Hospital’s Rule
+Unit 4: Applications of Derivatives (4 Hrs.)
+Curve Sketching
+Review of Maxima and Minima of One Variable
+Optimization Problems
+Newton’s Method
+Unit 5: Antiderivatives (5 Hrs.)
+Review of Antiderivatives
+Rectilinear Motion
+Indefinite Integrals and Net Change
+Definite Integral
+Fundamental Theorem of Calculus
+Improper Integrals
+Unit 6: Applications of Antiderivatives (5 Hrs.)
+Areas Between Curves
+Volumes of Cylindrical Shells
+Approximate Integration
+Arc Length
+Area of Surface of Revolution
+Unit 7: Ordinary Differential Equations (6 Hrs.)
+Introduction
+First Order Differential Equations
+Separable Equations
+Linear Equations
+Second Order Linear Differential Equations
+Non-Homogeneous Linear Equations
+Method of Undetermined Coefficients
+Unit 8: Infinite Sequence and Series (5 Hrs.)
+Infinite Sequences
+Infinite Series
+Convergence Tests
+Power Series
+Taylor Series
+Maclaurin Series
+Unit 9: Plane and Space Vectors (4 Hrs.)
+Introduction
+Applications of Vectors
+Dot Product
+Cross Product
+Equations of Lines and Planes
+Derivatives of Vector Functions
+Integrals of Vector Functions
+Arc Length and Curvature
+Normal and Binormal Vectors
+Motion in Space
+Unit 10: Partial Derivatives and Multiple Integrals (3 Hrs.)
+Limits and Continuity of Functions of Several Variables
+Partial Derivatives
+Tangent Planes
+Maximum and Minimum Values
+Multiple Integrals
+Text Book
+James Stewart, Calculus: Early Transcendentals, 7th Edition, Cengage Learning.
+Reference Book
+Thomas, Calculus: Early Transcendentals, 12th Edition, Addison-Wesley.
