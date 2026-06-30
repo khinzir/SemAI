@@ -241,7 +241,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Initialize session state
-# Initialize session state
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 if 'user_id' not in st.session_state:
@@ -260,9 +259,6 @@ if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
 if 'subject_feature' not in st.session_state:
     st.session_state.subject_feature = "syllabus"
-if 'focus_chat' not in st.session_state:
-    st.session_state.focus_chat = False
-
 
 # Global clean naming map to ensure paths look up correctly
 SUBJECT_FOLDER_MAP = {
@@ -472,10 +468,23 @@ def show_semester_dashboard():
 
         st.markdown("---")
         # Study Assistant Button
-        # Study Assistant Button
-        if st.button("💬 Study Assistant", use_container_width=True, key="study_assistant_sidebar"):
-            st.session_state.focus_chat = True
-            st.rerun()
+        st.markdown("""
+        <a href="#sem-ai-study-assistant" style="text-decoration: none; display: block;">
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: 600;
+                margin: 10px 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            ">
+                💬 Study Assistant
+            </div>
+        </a>
+        """, unsafe_allow_html=True)
 
         if st.button("🚪 Sign Out", use_container_width=True):
             st.session_state.authenticated = False
@@ -611,10 +620,23 @@ def show_subject_page():
                 st.rerun()
 
         # Study Assistant Button
-        # Study Assistant Button
-        if st.button("💬 Study Assistant", use_container_width=True, key="study_assistant_subject"):
-            st.session_state.focus_chat = True
-            st.rerun()
+        st.markdown("""
+        <a href="#sem-ai-study-assistant" style="text-decoration: none; display: block;">
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: 600;
+                margin: 10px 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            ">
+                💬 Study Assistant
+            </div>
+        </a>
+        """, unsafe_allow_html=True)
 
     # ================= PAGE TITLE =================
 
@@ -915,21 +937,6 @@ def show_quiz(subject_code):
 
 def show_chat_assistant():
     """Production-Ready Chat Assistant with Database Integration"""
-    # Check if we need to focus/scroll to chat
-    if st.session_state.get('focus_chat', False):
-        st.session_state.focus_chat = False
-        # Use HTML with JavaScript to scroll to the chat section
-        st.markdown("""
-        <script>
-            // Scroll to chat section
-            const chatElement = document.querySelector('[data-testid="stChatInput"]');
-            if (chatElement) {
-                chatElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        </script>
-        """, unsafe_allow_html=True)
-        st.toast("💬 Study Assistant is ready!", icon="🤖")
-
     semester = st.session_state.selected_semester or 1
     subject = st.session_state.selected_subject or "General"
     subject_name = get_subjects(semester).get(subject, {}).get("full_name",
