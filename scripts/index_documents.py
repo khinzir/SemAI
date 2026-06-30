@@ -197,7 +197,7 @@ def index_all_documents():
 
     # Base path for semester 1 data
     base_path = Path("data/semester1")
-    subjects = ["C-Programming", "DL", "IIT", "Maths", "Physics"]
+    subjects = ["C_Programming", "DL", "IIT", "Maths_I", "Physics"]
 
     all_documents = []
     doc_id = 0

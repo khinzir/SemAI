@@ -8,6 +8,7 @@ import os
 import json
 import uuid
 import time
+import hashlib
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from typing import Dict, List, Optional
@@ -57,10 +58,12 @@ st.markdown("""
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         cursor: pointer;
         border: 1px solid #e5e7eb;
+        height: 260px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
-    
-    
     .subject-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -70,6 +73,7 @@ st.markdown("""
     .subject-icon {
         font-size: 2.5rem;
         margin-bottom: 0.5rem;
+        text-align: center;
     }
 
     .subject-title {
@@ -77,11 +81,13 @@ st.markdown("""
         font-weight: 600;
         color: #1f2937;
         margin: 0.5rem 0;
+        text-align: center;
     }
 
     .subject-code {
         font-size: 0.875rem;
         color: #6b7280;
+        text-align: center;
     }
 
     /* Progress bar styling */
@@ -176,18 +182,21 @@ st.markdown("""
     .message-user {
         background: #667eea;
         color: white;
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1rem;
         border-radius: 1rem;
         margin: 0.5rem 0;
         text-align: right;
+        margin-left: 20%;
     }
 
     .message-bot {
         background: #f3f4f6;
         color: #1f2937;
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1rem;
         border-radius: 1rem;
         margin: 0.5rem 0;
+        margin-right: 20%;
+        border-left: 4px solid #667eea;
     }
 
     /* Syllabus styling */
@@ -196,6 +205,18 @@ st.markdown("""
         border-radius: 0.5rem;
         padding: 1rem;
         margin: 1rem 0;
+        white-space: pre-wrap;
+        font-family: inherit;
+        line-height: 1.6;
+    }
+
+    /* Sticky navigation */
+
+
+    .nav-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
     }
 
     /* Responsive design */
@@ -205,6 +226,15 @@ st.markdown("""
         }
         .chat-container {
             width: 100%;
+        }
+        .nav-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .message-user {
+            margin-left: 10%;
+        }
+        .message-bot {
+            margin-right: 10%;
         }
     }
 </style>
@@ -216,7 +246,7 @@ if 'authenticated' not in st.session_state:
 if 'user_id' not in st.session_state:
     st.session_state.user_id = None
 if 'selected_semester' not in st.session_state:
-    st.session_state.selected_semester = None
+    st.session_state.selected_semester = 1
 if 'selected_subject' not in st.session_state:
     st.session_state.selected_subject = None
 if 'current_page' not in st.session_state:
@@ -227,6 +257,17 @@ if 'chat_expanded' not in st.session_state:
     st.session_state.chat_expanded = False
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = []
+if 'subject_feature' not in st.session_state:
+    st.session_state.subject_feature = "syllabus"
+
+# Global clean naming map to ensure paths look up correctly
+SUBJECT_FOLDER_MAP = {
+    "C_Programming": "C_Programming",
+    "DL": "DL",
+    "IIT": "IIT",
+    "Maths": "Maths",
+    "Physics": "Physics"
+}
 
 
 # Initialize database and LLM clients
@@ -241,184 +282,150 @@ def init_clients():
 db_client, llm_client, search_client = init_clients()
 
 
+# ==================== UTILITY FUNCTIONS ====================
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+
+def get_icon(subject_code):
+    icons = {
+        "C_Programming": "⌨️",
+        "DL": "🔌",
+        "IIT": "💻",
+        "Maths": "📐",
+        "Physics": "⚡",
+        "Discrete_Structures": "🔢"
+    }
+    return icons.get(subject_code, "📚")
+
+
+def load_user_data():
+    """Load all user data from database into session state"""
+    if not st.session_state.user_id:
+        return
+
+    # Load progress for all subjects
+    for sem in COURSE_STRUCTURE.keys():
+        for subj in get_subjects(sem).keys():
+            mins = db_client.get_progress(st.session_state.user_id, sem, subj)
+            if mins > 0:
+                key = f"{st.session_state.user_id}_{sem}_{subj}"
+                st.session_state.study_timers[key] = mins
+
+    # Load semester preference
+    pref = db_client.get_user_preference(st.session_state.user_id, "selected_semester")
+    if pref:
+        st.session_state.selected_semester = int(pref)
+
+    # Load chat history for general
+    st.session_state.chat_history = db_client.load_chat_history(st.session_state.user_id, "General")
+
+
+def save_preference(key, value):
+    if st.session_state.user_id:
+        db_client.save_preference(st.session_state.user_id, key, value)
+
+
+def update_progress(subject_code, mins=1):
+    """Update study time for a subject"""
+    if not st.session_state.user_id:
+        return
+
+    semester = st.session_state.selected_semester
+    key = f"{st.session_state.user_id}_{semester}_{subject_code}"
+
+    if key not in st.session_state.study_timers:
+        st.session_state.study_timers[key] = 0
+
+    st.session_state.study_timers[key] += mins
+    db_client.save_progress(st.session_state.user_id, semester, subject_code,
+                            st.session_state.study_timers[key])
+
+
+def get_progress_percentage(subject_code):
+    """Calculate progress percentage (2 hours = 100%)"""
+    if not st.session_state.user_id:
+        return 0
+
+    semester = st.session_state.selected_semester
+    key = f"{st.session_state.user_id}_{semester}_{subject_code}"
+    minutes_studied = st.session_state.study_timers.get(key, 0)
+
+    # 120 minutes (2 hours) = 100%
+    percentage = min(100, (minutes_studied / 120) * 100)
+    return percentage
+
+
 # ==================== AUTHENTICATION ====================
 
-# def show_login():
-#     """Display login/signup interface"""
-#     st.markdown("""
-#     <div class='header-container'>
-#         <h1>🎓 SemAI</h1>
-#         <p>Intelligent Tutoring System for CSIT Students</p>
-#         <p style='font-size: 0.9rem; opacity: 0.9'>Semester 1 • 5 Subjects • AI-Powered Learning</p>
-#     </div>
-#     """, unsafe_allow_html=True)
-#
-#     col1, col2, col3 = st.columns([1, 2, 1])
-#
-#     with col2:
-#         tab1, tab2 = st.tabs(["🔐 Login", "📝 Sign Up"])
-#
-#         with tab1:
-#             # with st.form("login_form"):
-#             #     email = st.text_input("Email")
-#             #     password = st.text_input("Password", type="password")
-#             #
-#             #     if st.form_submit_button("Login", use_container_width=True):
-#             #         if email and password:
-#             #             # Simple demo authentication
-#             #             # In production, use proper auth
-#             #             st.session_state.authenticated = True
-#             #             st.session_state.user_id = email.replace("@", "_").replace(".", "_")
-#             #             st.session_state.selected_semester = 1  # Default to semester 1
-#             #             st.rerun()
-#             #         else:
-#             #             st.error("Please enter email and password")
-#             with st.form("login_form"):
-#                 email = st.text_input("Academic Email Address")
-#                 password = st.text_input("Security Passcode", type="password")
-#
-#                 if st.form_submit_button("Login", use_container_width=True):
-#                     if email and password:
-#                         # Connect with the database user profile validation
-#                         user_profile = db_client.verify_or_create_user(email, password)
-#                         user_id = user_profile["user_id"]
-#
-#                         st.session_state.authenticated = True
-#                         st.session_state.user_id = user_id
-#                         st.session_state.selected_semester = 1
-#
-#                         # DOWNLOAD LOGGED PERSISTENT MINUTES ON LOGIN
-#                         from config.course_structure import get_subjects
-#                         subjects = get_subjects(1)
-#                         for subj_code in subjects.keys():
-#                             key = f"{user_id}_1_{subj_code}"
-#                             st.session_state.study_timers[key] = db_client.get_progress(user_id, 1, subj_code)
-#
-#                         st.rerun()
-#                     else:
-#                         st.error("Please enter email and password")
-#
-#                 if st.form_submit_button("Verify Account Profile", use_container_width=True):
-#                     if email.strip() and password.strip():
-#                         # 1. Run rigorous verification check against db engine
-#                         user_profile = db_client.verify_or_create_user(email, password)
-#
-#                         if user_profile:
-#                             st.session_state.authenticated = True
-#                             st.session_state.user_id = user_profile["user_id"]
-#                             st.session_state.selected_semester = user_profile["selected_semester"]
-#
-#                             # 2. Rehydrate state progress bars across sessions
-#                             st.session_state.study_timers = db_client.load_all_user_progress(user_profile["user_id"])
-#
-#                             st.success("Verification successful! Opening profile workspace...")
-#                             st.rerun()
-#                         else:
-#                             st.error("Authentication failed. Invalid passcode match.")
-#         with tab2:
-#             with st.form("signup_form"):
-#                 name = st.text_input("Full Name")
-#                 email = st.text_input("Email")
-#                 password = st.text_input("Password", type="password")
-#                 confirm_password = st.text_input("Confirm Password", type="password")
-#
-#                 if st.form_submit_button("Sign Up", use_container_width=True):
-#                     if password != confirm_password:
-#                         st.error("Passwords don't match")
-#                     elif email and password:
-#                         user_profile = db_client.verify_or_create_user(email, password)
-#                         user_id = user_profile["user_id"]
-#
-#                         st.session_state.authenticated = True
-#                         st.session_state.user_id = user_id
-#                         st.session_state.selected_semester = 1
-#
-#                         # Populate fresh entries for a new registration profile
-#                         from config.course_structure import get_subjects
-#                         for subj_code in get_subjects(1).keys():
-#                             key = f"{user_id}_1_{subj_code}"
-#                             st.session_state.study_timers[key] = 0
-#                             db_client.save_progress(user_id, 1, subj_code, 0)
-#                         st.rerun()
-#                     else:
-#                         st.error("Please fill all fields")
 def show_login():
     """Display login/signup interface"""
     st.markdown("""
     <div class='header-container'>
         <h1>🎓 SemAI</h1>
         <p>Intelligent Tutoring System for CSIT Students</p>
+        <p style='font-size: 0.9rem; opacity: 0.9'>Semester 1 • 5 Subjects • AI-Powered Learning</p>
     </div>
     """, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns([1, 2, 1])
 
     with col2:
-        tab1, tab2 = st.tabs(["🔐 Login", "📝 Sign Up"])
+        tab1, tab2 = st.tabs(["🔐 Sign In", "📝 Create Account"])
 
         with tab1:
             with st.form("login_form"):
-                email = st.text_input("Email")
+                email = st.text_input("Institutional Email")
                 password = st.text_input("Password", type="password")
 
-                if st.form_submit_button("Login", use_container_width=True):
+                if st.form_submit_button("Sign In", use_container_width=True):
                     if email and password:
-                        # Clean local prototype authentication
-                        st.session_state.authenticated = True
-                        st.session_state.user_id = email.replace("@", "_").replace(".", "_")
-                        st.session_state.selected_semester = 1  # Default to semester 1
-                        st.rerun()
+                        user = db_client.get_user(email)
+                        if user and user.get("password") == hash_password(password):
+                            st.session_state.authenticated = True
+                            st.session_state.user_id = user["user_id"]
+                            # Load all user data
+                            load_user_data()
+                            st.rerun()
+                        else:
+                            st.error("Invalid email or password.")
                     else:
-                        st.error("Please enter email and password")
+                        st.warning("Please fill out all fields.")
 
         with tab2:
             with st.form("signup_form"):
                 name = st.text_input("Full Name")
-                email = st.text_input("Email")
-                password = st.text_input("Password", type="password")
-                confirm_password = st.text_input("Confirm Password", type="password")
+                email = st.text_input("Academic Email")
+                password = st.text_input("Password (min. 6 chars)", type="password")
+                confirm = st.text_input("Confirm Password", type="password")
 
-                if st.form_submit_button("Sign Up", use_container_width=True):
-                    if password != confirm_password:
-                        st.error("Passwords don't match")
-                    elif email and password:
-                        st.session_state.authenticated = True
-                        st.session_state.user_id = email.replace("@", "_").replace(".", "_")
-                        st.session_state.selected_semester = 1
-                        st.rerun()
+                if st.form_submit_button("Register Account", use_container_width=True):
+                    is_valid, err_msg = db_client.validate_signup_inputs(email, password)
+
+                    if not name:
+                        st.error("Please enter your full name.")
+                    elif not is_valid:
+                        st.error(err_msg)
+                    elif password != confirm:
+                        st.error("Passwords do not match.")
+                    elif db_client.get_user(email):
+                        st.error("This email is already registered.")
                     else:
-                        st.error("Please fill all fields")
+                        # Create new user
+                        u_id = db_client.save_user(email, hash_password(password), name, 1)
+                        st.session_state.authenticated = True
+                        st.session_state.user_id = u_id
+                        st.session_state.selected_semester = 1
 
+                        # Initialize tracking for all subjects
+                        for subj_code in get_subjects(1).keys():
+                            key = f"{u_id}_1_{subj_code}"
+                            st.session_state.study_timers[key] = 0
+                            db_client.save_progress(u_id, 1, subj_code, 0)
 
-# ==================== STUDY TIMER LOGIC ====================
-
-def update_study_time(subject_code: str, duration_minutes: int = 1):
-    """Update study time for a subject (simulated - time-based progress)"""
-    user_id = st.session_state.user_id
-    semester = st.session_state.selected_semester
-
-    key = f"{user_id}_{semester}_{subject_code}"
-
-    if key not in st.session_state.study_timers:
-        st.session_state.study_timers[key] = 0
-
-    st.session_state.study_timers[key] += duration_minutes
-
-    # Save to database
-    db_client.save_progress(user_id, semester, subject_code, st.session_state.study_timers[key])
-
-
-def get_progress_percentage(subject_code: str) -> float:
-    """Calculate progress percentage (2 hours = 100%)"""
-    user_id = st.session_state.user_id
-    semester = st.session_state.selected_semester
-
-    key = f"{user_id}_{semester}_{subject_code}"
-    minutes_studied = st.session_state.study_timers.get(key, 0)
-
-    # 120 minutes (2 hours) = 100%
-    percentage = min(100, (minutes_studied / 120) * 100)
-    return percentage
+                        st.success("Registration successful!")
+                        st.rerun()
 
 
 # ==================== SEMESTER DASHBOARD ====================
@@ -435,31 +442,18 @@ def show_semester_dashboard():
     </div>
     """, unsafe_allow_html=True)
 
-    # Semester selector in sidebar
-    # with st.sidebar:
-    #     st.markdown("### 🎯 Semester Navigation")
-    #     available_semesters = list(COURSE_STRUCTURE.keys())
-    #     selected_sem = st.selectbox(
-    #         "Switch Semester",
-    #         available_semesters,
-    #         format_func=lambda x: f"Semester {x} - {COURSE_STRUCTURE[x]['name']}",
-    #         index=available_semesters.index(semester) if semester in available_semesters else 0
-    #     )
-    #     if selected_sem != semester:
-    #         st.session_state.selected_semester = selected_sem
-    #         st.rerun()
     with st.sidebar:
         st.markdown("### 🎯 Navigation Control")
         available_sems = list(COURSE_STRUCTURE.keys())
         selected_sem = st.selectbox(
-            "Change Track View",
+            "Change Semester",
             available_sems,
-            format_func=lambda x: f"Semester {x} - {COURSE_STRUCTURE[x]['name']}"
+            format_func=lambda x: f"Semester {x} - {COURSE_STRUCTURE[x]['name']}",
+            index=available_sems.index(semester) if semester in available_sems else 0
         )
         if selected_sem != semester:
             st.session_state.selected_semester = selected_sem
-            # NEW: Immediately save preference to database
-            db_client.save_semester_preference(st.session_state.user_id, selected_sem)
+            save_preference("selected_semester", str(selected_sem))
             st.rerun()
 
         st.markdown("---")
@@ -472,64 +466,83 @@ def show_semester_dashboard():
         st.metric("Average Progress", f"{avg_progress:.0f}%")
         st.metric("Subjects Enrolled", subject_count)
 
+        st.markdown("---")
+        # Study Assistant Button
+        st.markdown("""
+        <a href="#sem-ai-study-assistant" style="text-decoration: none; display: block;">
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: 600;
+                margin: 10px 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            ">
+                💬 Study Assistant
+            </div>
+        </a>
+        """, unsafe_allow_html=True)
+
+        if st.button("🚪 Sign Out", use_container_width=True):
+            st.session_state.authenticated = False
+            st.session_state.user_id = None
+            st.session_state.chat_history = []
+            st.rerun()
+
     # Display subjects in grid
     st.markdown("### 📖 Your Subjects")
 
     subjects = get_subjects(semester)
     cols = st.columns(3)
 
+    from streamlit_card import card
+
     for idx, (subject_code, subject_info) in enumerate(subjects.items()):
         with cols[idx % 3]:
             progress = get_progress_percentage(subject_code)
-
-            st.markdown(f"""
-            <div class='subject-card' onclick="alert('Navigate to {subject_info['full_name']}')">
-                <div class='subject-icon'>
-                    {get_subject_icon(subject_code)}
-                </div>
-                <div class='subject-title'>{subject_info['full_name']}</div>
-                <div class='subject-code'>{subject_code}</div>
-                <div class='progress-container'>
-                    <div class='progress-label'>
-                        <span>Progress</span>
-                        <span>{progress:.0f}%</span>
-                    </div>
-                    <div class='progress-bar'>
-                        <div class='progress-fill' style='width: {progress}%'></div>
-                    </div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # if st.button(f"Study {subject_info['full_name']}", key=f"study_{subject_code}", use_container_width=True):
-            #     st.session_state.selected_subject = subject_code
-            #     st.session_state.current_page = "subject"
-            #     # Start timer for this subject
-            #     update_study_time(subject_code, 0)
-            #     st.rerun()
-            if st.button(f"Study {subject_info['full_name']}", key=f"btn_{subject_code}", use_container_width=True):
+            clicked = card(
+                title=f"{get_icon(subject_code)}  {subject_info['full_name']}",
+                text=[subject_code, f"Progress: {progress:.0f}%",
+                      "▰" * int(progress / 10) + "▱" * (10 - int(progress / 10))],
+                key=f"card_{subject_code}",
+                styles={
+                    "card": {
+                        "width": "100%",
+                        "height": "260px",
+                        "border-radius": "1rem",
+                        "box-shadow": "0 4px 6px rgba(0,0,0,0.1)",
+                        "border": "1px solid #e5e7eb",
+                        "background-color": "white",
+                        "cursor": "pointer",
+                        "margin": "1rem 0",
+                        "color": "#1f2937",
+                    },
+                    "title": {
+                        "font-size": "1.2rem",
+                        "font-weight": "600",
+                        "color": "#1f2937",
+                        "font-family": "inherit",
+                    },
+                    "text": {
+                        "font-size": "0.875rem",
+                        "color": "#6b7280",
+                        "font-family": "inherit",
+                    },
+                    "filter": {
+                        "background-color": "rgba(0,0,0,0)"
+                    }
+                }
+            )
+            if clicked:
                 st.session_state.selected_subject = subject_code
                 st.session_state.current_page = "subject"
-
-                # NEW: Hydrate chat logs exclusively for this subject channel on enter
-                st.session_state.chat_history = db_client.load_chat_history(st.session_state.user_id, subject_code)
-
                 st.session_state.subject_feature = "syllabus"
-                update_study_time(subject_code, 0)
+                st.session_state.chat_history = db_client.load_chat_history(st.session_state.user_id, subject_code)
+                update_progress(subject_code, 0)
                 st.rerun()
-
-
-def get_subject_icon(subject_code: str) -> str:
-    """Return emoji icon for subject"""
-    icons = {
-        "C_Programming": "⌨️",
-        "DL": "🔌",
-        "IIT": "💻",
-        "Maths": "📐",
-        "Physics": "⚡",
-        "Discrete_Structures": "🔢"
-    }
-    return icons.get(subject_code, "📚")
 
 
 # ==================== SUBJECT PAGE ====================
@@ -542,69 +555,101 @@ def show_subject_page():
     subject_name = subject_info.get("full_name", subject_code)
 
     # Update study timer (active studying)
-    update_study_time(subject_code, 1)
+    update_progress(subject_code, 1)
 
-    # Back button and header
-    col1, col2 = st.columns([1, 5])
-    with col1:
-        # if st.button("← Back", use_container_width=True):
-        #     st.session_state.current_page = "dashboard"
-        #     st.rerun()
-        if st.button("← Back", use_container_width=True):
+
+    # ================= SUBJECT SIDEBAR =================
+
+    progress = get_progress_percentage(subject_code)
+
+    with st.sidebar:
+
+        # Dashboard button
+        if st.button(
+                "← Dashboard",
+                use_container_width=True,
+                key="sidebar_dashboard",
+        ):
             st.session_state.current_page = "dashboard"
-            st.session_state.selected_subject = "General"
-            st.session_state.chat_history = db_client.load_chat_history(st.session_state.user_id, "General")
+            st.session_state.selected_subject = None
+            st.session_state.chat_history = db_client.load_chat_history(
+                st.session_state.user_id,
+                "General",
+            )
             st.rerun()
 
-    with col2:
-        st.markdown(f"## {get_subject_icon(subject_code)} {subject_name}")
+        # Subject header
+        st.markdown(
+            f"""
+            <div style="text-align:center; padding:10px 0;">
+                <div style="font-size:30px;">{get_icon(subject_code)}</div>
+                <h3 style="margin:5px 0;">{subject_name}</h2>
+                <p style="margin:12px 0 8px 0; font-size:17px;">
+                    Overall Progress:
+                    <span style="font-weight:bold; font-size:16px; color:#4CAF50;">
+                        {progress:.0f}%
+                    </span>
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
-    # Progress bar
-    progress = get_progress_percentage(subject_code)
-    st.markdown(f"""
-    <div class='progress-container'>
-        <div class='progress-label'>
-            <span>📊 Overall Progress</span>
-            <span>{progress:.0f}% complete</span>
-        </div>
-        <div class='progress-bar'>
-            <div class='progress-fill' style='width: {progress}%'></div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+        st.progress(progress / 100)
 
-    # Time remaining until mastery
-    remaining_minutes = max(0, 120 - (progress / 100 * 120))
-    if remaining_minutes <= 0:
-        st.success("Congratulations! You've mastered this subject!")
+        st.markdown(
+            "<h4 style='text-align:center; margin-bottom:10px;'>Navigation</h4>",
+            unsafe_allow_html=True,
+        )
 
-    st.markdown("---")
+        nav_items = [
+            ("📋 Syllabus", "syllabus"),
+            ("📖 Chapter Notes", "notes"),
+            ("⭐ Core Questions", "questions"),
+            ("📝 Assessment Quiz", "quiz"),
+        ]
 
-    # Feature grid
-    st.markdown("### 🎯 Learning Tools")
+        for label, feat in nav_items:
+            if st.button(
+                    label,
+                    key=f"sidebar_{feat}",
+                    use_container_width=True,
+                    type="primary" if st.session_state.subject_feature == feat else "secondary",
+            ):
+                st.session_state.subject_feature = feat
+                st.rerun()
 
-    col1, col2, col3, col4 = st.columns(4)
+        # Study Assistant Button
+        st.markdown("""
+        <a href="#sem-ai-study-assistant" style="text-decoration: none; display: block;">
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                font-weight: 600;
+                margin: 10px 0;
+                transition: all 0.3s ease;
+                cursor: pointer;
+            ">
+                💬 Study Assistant
+            </div>
+        </a>
+        """, unsafe_allow_html=True)
 
-    with col1:
-        if st.button("📋 Syllabus", use_container_width=True, key="btn_syllabus"):
-            st.session_state.subject_feature = "syllabus"
+    # ================= PAGE TITLE =================
 
-    with col2:
-        if st.button("📖 Chapter Notes", use_container_width=True, key="btn_notes"):
-            st.session_state.subject_feature = "notes"
+    st.title(f"{get_icon(subject_code)} {subject_name}")
 
-    with col3:
-        if st.button("⭐ Important Qs", use_container_width=True, key="btn_questions"):
-            st.session_state.subject_feature = "questions"
+    st.caption(
+        f"Overall Progress: {progress:.0f}%"
+    )
 
-    with col4:
-        if st.button("📝 Take Quiz", use_container_width=True, key="btn_quiz"):
-            st.session_state.subject_feature = "quiz"
-
-    st.markdown("---")
+    st.divider()
 
     # Display selected feature
-    feature = st.session_state.get("subject_feature", "syllabus")
+    feature = st.session_state.subject_feature
 
     if feature == "syllabus":
         show_syllabus(subject_code)
@@ -616,19 +661,19 @@ def show_subject_page():
         show_quiz(subject_code)
 
 
-def show_syllabus(subject_code: str):
+def show_syllabus(subject_code):
     """Display syllabus from file"""
-    syllabus_path = f"data/semester1/{subject_code}/syllabus.txt"
-
     st.markdown("### 📋 Course Syllabus")
 
+    folder = SUBJECT_FOLDER_MAP.get(subject_code, subject_code)
+    syllabus_path = f"data/semester1/{folder}/syllabus.txt"
+
     if os.path.exists(syllabus_path):
-        with open(syllabus_path, 'r') as f:
+        with open(syllabus_path, 'r', encoding='utf-8', errors='ignore') as f:
             syllabus_content = f.read()
-        # st.markdown(f"<div class='syllabus-section'>{syllabus_content}</div>", unsafe_allow_html=True)
-        st.markdown(f"<div class='syllabus-section' style='white-space: pre-wrap;'>{syllabus_content}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='syllabus-section'>{syllabus_content}</div>", unsafe_allow_html=True)
     else:
-        st.info("Syllabus content will be added soon. Meanwhile, explore other features!")
+        st.info("Course syllabus will be added soon. Meanwhile, explore other features!")
 
         # Display chapters from config
         chapters = get_chapters(st.session_state.selected_semester, subject_code)
@@ -638,7 +683,7 @@ def show_syllabus(subject_code: str):
                 st.markdown(f"{i}. {chapter}")
 
 
-def show_chapter_notes(subject_code: str):
+def show_chapter_notes(subject_code):
     """Generate notes for selected chapter"""
     st.markdown("### 📖 Chapter-wise Notes")
 
@@ -683,7 +728,7 @@ def show_chapter_notes(subject_code: str):
                 st.markdown(response)
 
                 # Update study time for generating notes
-                update_study_time(subject_code, 5)
+                update_progress(subject_code, 5)
             else:
                 st.info("📚 Textbook content will be available after indexing. For now, here's a sample:")
                 st.markdown(f"""
@@ -699,14 +744,15 @@ def show_chapter_notes(subject_code: str):
                 """)
 
 
-def show_important_questions(subject_code: str):
+def show_important_questions(subject_code):
     """Display important questions from Q&A pairs"""
     st.markdown("### ⭐ Important Questions")
 
-    qna_path = f"data/semester1/{subject_code}/qna_pairs.json"
+    folder = SUBJECT_FOLDER_MAP.get(subject_code, subject_code)
+    qna_path = f"data/semester1/{folder}/qna_pairs.json"
 
     if os.path.exists(qna_path):
-        with open(qna_path, 'r') as f:
+        with open(qna_path, 'r', encoding='utf-8', errors='ignore') as f:
             qna_data = json.load(f)
 
         qa_pairs = qna_data.get("qa_pairs", [])
@@ -724,22 +770,11 @@ def show_important_questions(subject_code: str):
         else:
             st.info("No questions available yet.")
     else:
-        st.info("📝 Q&A pairs will be added soon. You can contribute by adding questions!")
-
-        # Sample questions
-        st.markdown("#### Example Questions (Coming Soon):")
-        st.markdown("""
-        - Explain the concept of [topic] with examples
-        - What are the differences between X and Y?
-        - Write short notes on [important topics]
-        - Solve the following problem...
-        """)
+        st.info("📝 Q&A pairs will be added soon.")
 
 
-
-
-def show_quiz(subject_code: str):
-    """Interactive quiz with random topic generation and reliable state navigation"""
+def show_quiz(subject_code):
+    """Interactive quiz with random topic generation"""
     st.markdown("### 📝 Practice Quiz")
 
     # Quiz options
@@ -747,17 +782,17 @@ def show_quiz(subject_code: str):
 
     if st.button("Start Quiz", type="primary", use_container_width=True):
         with st.spinner("Generating fresh quiz questions..."):
-            # 1. Fetch real chapters for this subject
+            # Fetch real chapters for this subject
             chapters = get_chapters(st.session_state.selected_semester, subject_code)
 
-            # 2. Pick a shifting mix of chapters to force variation
+            # Pick a shifting mix of chapters
             import random
             sampled_chapters = random.sample(chapters, min(3, len(chapters))) if chapters else ["General concepts"]
 
-            # 3. Create a unique seed token to bypass the LLM's pattern cache
+            # Create a unique seed token
             random_seed = random.randint(1000, 9999)
 
-            # 4. Build a completely dynamic prompt string
+            # Build dynamic prompt
             prompt = f"""
             Generate a completely unique and original set of 5 multiple-choice questions for the CSIT subject: {subject_code}.
 
@@ -790,25 +825,25 @@ def show_quiz(subject_code: str):
             ])
 
             try:
-                # Parse JSON response cleanly
+                # Parse JSON response
                 import re
                 json_match = re.search(r'\{.*\}', response, re.DOTALL)
                 if json_match:
                     quiz_data = json.loads(json_match.group())
                     questions = quiz_data.get("questions", [])
 
-                    # Store pristine quiz structures into state tracking tags
+                    # Store in session state
                     st.session_state.active_quiz = questions
                     st.session_state.quiz_answers = []
                     st.session_state.quiz_score = 0
                     st.session_state.quiz_current = 0
-                    st.session_state.quiz_answered = False  # Track if user clicked submit on current Q
+                    st.session_state.quiz_answered = False
 
                     st.toast("🎯 Fresh quiz generated successfully!", icon="✅")
                     st.rerun()
             except Exception as e:
                 st.error("Could not parse the AI's quiz JSON structure. Falling back to default questions.")
-                # Clean fallback system to prevent outright runtime crashes
+                # Fallback questions
                 fallback_qs = [
                     {"question": f"What is a fundamental concept in {subject_code}?",
                      "options": ["A) Option One", "B) Option Two", "C) Option Three", "D) Option Four"],
@@ -822,7 +857,7 @@ def show_quiz(subject_code: str):
                 st.session_state.quiz_answered = False
                 st.rerun()
 
-    # Display active quiz gameplay loop
+    # Display active quiz
     if 'active_quiz' in st.session_state and st.session_state.active_quiz:
         quiz = st.session_state.active_quiz
         current_idx = st.session_state.get('quiz_current', 0)
@@ -830,7 +865,7 @@ def show_quiz(subject_code: str):
         if current_idx < len(quiz):
             q = quiz[current_idx]
 
-            # Progress bar visualization
+            # Progress bar
             st.progress((current_idx + 1) / len(quiz))
             st.markdown(f"### Question {current_idx + 1} of {len(quiz)}")
             st.markdown(f"**{q['question']}**")
@@ -838,7 +873,7 @@ def show_quiz(subject_code: str):
             # Check if user has evaluated this question yet
             is_answered = st.session_state.get('quiz_answered', False)
 
-            # Disable option selection after submitting so they can't change it while reading explanation
+            # Disable option selection after submitting
             selected = st.radio("Select your answer:", q['options'], key=f"q_{current_idx}", disabled=is_answered)
 
             col1, col2 = st.columns(2)
@@ -846,7 +881,6 @@ def show_quiz(subject_code: str):
             if not is_answered:
                 with col1:
                     if st.button("Submit Answer", use_container_width=True):
-                        # Graceful fallback logic matching for choice parsing formats ("A)" vs "A")
                         is_correct = selected.strip().startswith(q['correct']) or selected[0] == q['correct']
                         if is_correct:
                             st.session_state.quiz_score += 1
@@ -862,7 +896,7 @@ def show_quiz(subject_code: str):
                         st.session_state.quiz_answered = True
                         st.rerun()
             else:
-                # User has submitted. Reveal explicit evaluation cards.
+                # Show evaluation
                 if selected.strip().startswith(q['correct']) or selected[0] == q['correct']:
                     st.success(f"✅ **Correct!** The answer is indeed option {q['correct']}.")
                 else:
@@ -870,13 +904,12 @@ def show_quiz(subject_code: str):
 
                 st.info(f"📖 **Explanation:** {q['explanation']}")
 
-                # Unnested independent Next button to increment index and flip states
                 if st.button("Next Question →", type="primary", use_container_width=True):
                     st.session_state.quiz_current = current_idx + 1
                     st.session_state.quiz_answered = False
                     st.rerun()
         else:
-            # Quiz final completion handling
+            # Quiz completed
             st.balloons()
             st.markdown(f"## 🎉 Quiz Completed!")
             st.markdown(f"### Your Final Score: {st.session_state.quiz_score}/{len(quiz)}")
@@ -889,8 +922,8 @@ def show_quiz(subject_code: str):
             else:
                 st.warning("📚 More practice needed. Review your chapter study notes and try again!")
 
-            # Log execution telemetry records into tracking frameworks
-            update_study_time(subject_code, 10)
+            # Update progress
+            update_progress(subject_code, 10)
 
             if st.button("Take Another Quiz", use_container_width=True):
                 del st.session_state.active_quiz
@@ -900,10 +933,10 @@ def show_quiz(subject_code: str):
                 st.rerun()
 
 
-
+# ==================== CHAT ASSISTANT ====================
 
 def show_chat_assistant():
-    """Production-Ready Chat Assistant with Hardcoded Exact Tree Mappings"""
+    """Production-Ready Chat Assistant with Database Integration"""
     semester = st.session_state.selected_semester or 1
     subject = st.session_state.selected_subject or "General"
     subject_name = get_subjects(semester).get(subject, {}).get("full_name",
@@ -913,8 +946,7 @@ def show_chat_assistant():
     st.markdown("### 🤖 SemAI Study Assistant")
     st.caption(f"Context: Semester {semester} | {subject_name}")
 
-
-    # Configuration panel layout
+    # Configuration panel
     col1, col2, col3 = st.columns([2, 1, 1])
     with col1:
         model_choice = st.selectbox(
@@ -930,7 +962,7 @@ def show_chat_assistant():
                                    index=all_subjects.index(subject) if subject in all_subjects else 0,
                                    key="manual_subj")
 
-    # NEW: Sources Selection Filter
+    # Sources Selection Filter
     selected_sources = st.multiselect(
         "📚 Active Data Sources for Next Answer:",
         ["Syllabus", "Past Questions Solutions (Q&A)", "Chapter Notes", "Past Questions", "Textbooks"],
@@ -938,10 +970,10 @@ def show_chat_assistant():
         key="chat_sources_filter"
     )
 
-    # Optional file attachment field
+    # Optional file attachment
     uploaded_file = st.file_uploader("📎 Upload file for context (optional)", type=['txt', 'pdf', 'md'])
 
-    # Chat history window frame
+    # Chat history display
     chat_container = st.container()
 
     with chat_container:
@@ -955,7 +987,7 @@ def show_chat_assistant():
                 if "citations" in msg and msg["citations"]:
                     st.caption(f"📖 Sources: {', '.join(msg['citations'])}")
 
-    # Capture chat input
+    # Chat input
     user_query = st.chat_input("Ask the SemAI Study Assistant...")
 
     if user_query:
@@ -965,13 +997,12 @@ def show_chat_assistant():
             local_context_buffer = ""
             sources_found = []
 
-
             # ==========================================
-            # EXACT LOCAL DISK READ (MATCHING YOUR FIXED TREE)
+            # LOCAL DISK READ
             # ==========================================
             if manual_subj != "General":
                 folder_mapping = {
-                    "C_Programming": "C-Programming",
+                    "C_Programming": "C_Programming",
                     "DL": "DL",
                     "IIT": "IIT",
                     "Maths": "Maths",
@@ -982,7 +1013,7 @@ def show_chat_assistant():
                 target_dir = f"data/semester1/{folder_name}"
 
                 if os.path.exists(target_dir):
-                    # A. Gated Local Syllabus Check
+                    # A. Syllabus Check
                     if "Syllabus" in selected_sources:
                         syllabus_file = os.path.join(target_dir, "syllabus.txt")
                         if os.path.exists(syllabus_file):
@@ -993,7 +1024,7 @@ def show_chat_assistant():
                             except Exception:
                                 pass
 
-                    # B. Gated Past Questions Solutions Check (qna_pairs.json)
+                    # B. Q&A Pairs Check
                     if "Past Questions Solutions (Q&A)" in selected_sources:
                         qna_file = os.path.join(target_dir, "qna_pairs.json")
                         if os.path.exists(qna_file):
@@ -1017,13 +1048,13 @@ def show_chat_assistant():
                             except Exception:
                                 pass
 
-                    # C. Gated Local Notes Check (Reads raw text notes files from directory if selected)
+                    # C. Notes Check
                     if "Chapter Notes" in selected_sources:
                         notes_dir = os.path.join(target_dir, "notes")
                         if os.path.exists(notes_dir):
                             try:
                                 notes_content = ""
-                                for file in os.listdir(notes_dir)[:3]:  # limit to top files to preserve token space
+                                for file in os.listdir(notes_dir)[:3]:
                                     if file.endswith(('.txt', '.md')):
                                         with open(os.path.join(notes_dir, file), 'r', encoding='utf-8',
                                                   errors='ignore') as f:
@@ -1034,21 +1065,10 @@ def show_chat_assistant():
                             except Exception:
                                 pass
 
-                    # D. Gated Raw Past Questions Check
-                    if "Past Questions" in selected_sources:
-                        pq_dir = os.path.join(target_dir, "past_questions")
-                        if os.path.exists(pq_dir):
-                            # Gathers file names/structures to feed context as guidance
-                            files = [f for f in os.listdir(pq_dir) if f.endswith(('.txt', '.md', '.pdf'))]
-                            if files:
-                                local_context_buffer += f"\n--- AVAILABLE PAST EXAM PAPERS FOUND ---\nFiles available: {', '.join(files)}\n"
-                                sources_found.append("Past Exam Papers List")
-
             # ==========================================
             # REMOTE RAG CLOUD SEARCH
             # ==========================================
             search_results = []
-            # Only trigger vector retrieval call if 'Textbooks' source filter is checked active
             if manual_subj != "General" and "Textbooks" in selected_sources:
                 try:
                     search_results = search_client.search(user_query, semester=int(manual_sem), subject=manual_subj,
@@ -1063,7 +1083,7 @@ def show_chat_assistant():
                 sources_found.append("User Upload")
 
             # ==========================================
-            # SYSTEM CONTEXT INJECTION ASSEMBLY
+            # SYSTEM CONTEXT INJECTION
             # ==========================================
             system_prompt = f"""You are SemAI, an expert university professor and personal AI tutor for CSIT students.
 Current Academic Scope: Semester {manual_sem}, Subject Domain: {manual_subj}
@@ -1087,7 +1107,7 @@ INSTRUCTIONS FOR GENERATION:
             ]
 
             # ==========================================
-            # MODEL CALL EXECUTION LOOP
+            # MODEL CALL
             # ==========================================
             try:
                 if model_choice == "Free (GitHub Models)":
@@ -1100,7 +1120,7 @@ INSTRUCTIONS FOR GENERATION:
             except Exception as model_err:
                 response = f"Critical engine crash during inference call: {str(model_err)}"
 
-            # Format final messaging asset array
+            # Format final message
             bot_message = {
                 "role": "assistant",
                 "content": response,
@@ -1108,7 +1128,7 @@ INSTRUCTIONS FOR GENERATION:
             }
             st.session_state.chat_history.append(bot_message)
 
-            # Sync log systems
+            # Save to database
             try:
                 db_client.save_message(st.session_state.user_id, manual_subj, "user", user_query)
                 db_client.save_message(st.session_state.user_id, manual_subj, "assistant", response)
@@ -1116,12 +1136,13 @@ INSTRUCTIONS FOR GENERATION:
                 pass
 
             if manual_subj != "General":
-                update_study_time(manual_subj, 2)
+                update_progress(manual_subj, 2)
 
             st.rerun()
 
     if st.button("🗑️ Clear Chat History", use_container_width=False):
         st.session_state.chat_history = []
+        # Also clear from database if needed
         st.rerun()
 
 
@@ -1141,10 +1162,12 @@ def main():
     elif st.session_state.current_page == "subject":
         show_subject_page()
 
-    # Show chat assistant at bottom (always visible)
-    st.markdown("---")
+    # Show chat assistant at bottom
     show_chat_assistant()
 
 
 if __name__ == "__main__":
     main()
+
+
+

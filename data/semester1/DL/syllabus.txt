@@ -1,104 +1,123 @@
-CSC111 - Digital Logic
+# CSC111 — Digital Logic
 
-Course Title: Digital Logic
-Course No: CSC111
-Nature of Course: Theory + Lab
-Semester: I
-Credit Hours: 3
+> **Summary:** Learn the fundamentals of digital systems, Boolean algebra, combinational & sequential circuits, registers, counters, and memory. The course builds the foundation for computer architecture and digital hardware design.
 
-Full Marks: 60 + 20 + 20
-Pass Marks: 24 + 8 + 8
+**Credits:** 3 (Theory + Lab)
 
-Course Description
+---
 
-This course covers the concepts of digital logic and switching networks. The course includes the fundamental concepts of Boolean algebra and its application for circuit analysis, multilevel gate networks, flip-flops, counters, logic devices, synchronous and asynchronous sequential logic, and digital integrated circuits.
+# Course Outline
 
-Course Objectives
+### Unit 1 — Binary Systems *(6 Hrs.)*
 
-The main objective of this course is to introduce the basic tools for the design of digital circuits and methods and procedures suitable for a variety of digital design applications.
+* Number systems
 
-Course Contents
-Unit 1: Binary Systems (6 Hrs.)
-Digital Systems
-Binary Numbers
-Number Base Conversion
-Octal and Hexadecimal Numbers
-Complements
-Signed Binary Numbers
-Decimal Codes:
-BCD
-2421 Code
-84-2-1 Code
-Excess-3 Code
-Gray Code
-Binary Storage and Registers
-Binary Logic
-Unit 2: Boolean Algebra and Logic Gates (5 Hrs.)
-Basic and Axiomatic Definitions of Boolean Algebra
-Basic Theorems and Properties of Boolean Algebra
-Boolean Functions
-Logic Operations
-Logic Gates
-Integrated Circuits
-Unit 3: Simplification of Boolean Functions (5 Hrs.)
-K-Map
-Two Variable Maps
-Three Variable Maps
-Four Variable Maps
-Product of Sum Simplification
-NAND Implementation
-NOR Implementation
-Don't Care Conditions
-Determination and Selection of Prime Implicants
-Unit 4: Combinational Logic (5 Hrs.)
-Design Procedure
-Adders
-Subtractors
-Code Conversions
-Analysis Procedure
-Multilevel NAND Circuits
-Multilevel NOR Circuits
-Exclusive-OR Circuits
-Unit 5: Combinational Logic with MSI and LSI (8 Hrs.)
-Binary Parallel Adder and Subtractor
-Decimal Adder
-Magnitude Comparator
-Decoders and Encoders
-Multiplexers
-Read-Only Memory (ROM)
-Programmable Logic Array (PLA)
-Programmable Array Logic (PAL)
-Unit 6: Synchronous and Asynchronous Sequential Logic (10 Hrs.)
-Flip-Flops
-Triggering of Flip-Flops
-Analysis of Clocked Sequential Circuits
-Design with State Equations
-State Reduction Table
-Introduction to Asynchronous Circuits
-Circuits with Latches
-Unit 7: Registers and Counters (6 Hrs.)
-Registers
-Shift Registers
-Ripple Counters
-Synchronous Counters
-Timing Sequences
-Memory
-Laboratory Works
+  * Binary, Octal, Hexadecimal
+  * Base conversions
+* Binary arithmetic
 
-Students should be able to realize the following digital logic circuits as part of laboratory work:
+  * Complements
+  * Signed binary numbers
+* Binary codes
 
-Familiarization with Logic Gates
-Combinational Circuits
-Code Converters
-Design with Multiplexers
-Adders and Subtractors
-Flip-Flops
-Sequential Circuits
-Counters
-Clock Pulse Generator
-Text Book
-M. Morris Mano, Digital Logic & Computer Design
-Reference Books
-Brian Holdsworth, Digital Logic Design, Elsevier Science.
-John Patrick Hayes, Introduction to Digital Logic Design, Addison-Wesley.
-M. Morris Mano and Charles Kime, Logic and Computer Design Fundamentals, Pearson New International.
+  * BCD
+  * 2421 Code
+  * 84-2-1 Code
+  * Excess-3
+  * Gray Code
+* Storage & Logic
+
+  * Registers
+  * Binary Logic
+
+---
+
+### Unit 2 — Boolean Algebra & Logic Gates *(5 Hrs.)*
+
+* Boolean algebra fundamentals
+* Laws and theorems
+* Boolean functions
+* Logic operations
+* Logic gates
+* Integrated Circuits (ICs)
+
+---
+
+### Unit 3 — Boolean Function Simplification *(5 Hrs.)*
+
+* Karnaugh Maps (2, 3 & 4 variables)
+* Product of Sums (POS)
+* NAND implementation
+* NOR implementation
+* Don't-care conditions
+* Prime implicants
+
+---
+
+### Unit 4 — Combinational Logic *(5 Hrs.)*
+
+* Design procedure
+* Adders & Subtractors
+* Code converters
+* Analysis procedure
+* Multilevel NAND/NOR circuits
+* XOR circuits
+
+---
+
+### Unit 5 — MSI & LSI Logic *(8 Hrs.)*
+
+* Parallel adders & subtractors
+* Decimal adder
+* Magnitude comparator
+* Decoder & Encoder
+* Multiplexer
+* ROM
+* PLA
+* PAL
+
+---
+
+### Unit 6 — Sequential Logic *(10 Hrs.)*
+
+* Flip-Flops
+* Triggering methods
+* Clocked sequential circuits
+* State equations
+* State reduction
+* Asynchronous circuits
+* Latches
+
+---
+
+### Unit 7 — Registers & Counters *(6 Hrs.)*
+
+* Registers
+* Shift registers
+* Ripple counters
+* Synchronous counters
+* Timing sequences
+* Memory
+
+---
+
+# Laboratory Work
+
+Students will implement:
+
+* Logic Gates
+* Combinational Circuits
+* Code Converters
+* Multiplexer Design
+* Adders & Subtractors
+* Flip-Flops
+* Sequential Circuits
+* Counters
+* Clock Pulse Generator
+
+---
+
+### Primary Textbook
+
+**M. Morris Mano** — *Digital Logic & Computer Design*
+
