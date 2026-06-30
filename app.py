@@ -469,7 +469,7 @@ def show_semester_dashboard():
         st.markdown("---")
         # Study Assistant Button
         st.markdown("""
-        <a href="#sem-ai-study-assistant" style="text-decoration: none; display: block;">
+        <a href="#3df2660b" style="text-decoration: none; display: block;">
             <div style="
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
@@ -621,7 +621,7 @@ def show_subject_page():
 
         # Study Assistant Button
         st.markdown("""
-        <a href="#sem-ai-study-assistant" style="text-decoration: none; display: block;">
+        <a href="#3df2660b" style="text-decoration: none; display: block;">
             <div style="
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 color: white;
