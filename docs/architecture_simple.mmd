@@ -1,0 +1,40 @@
+classDiagram
+    class UIController {
+        +main()
+        +show_login()
+        +show_dashboard()
+    }
+
+    class DatabaseManager {
+        +save_user()
+        +get_user()
+        +load_chat_history()
+    }
+
+    class RAGEngine {
+        +search()
+        +upload_document()
+    }
+
+    class LLMInterface {
+        +chat()
+        +chat_stream()
+    }
+
+    class User {
+        +str user_id
+        +str email
+        +str name
+    }
+
+    class ChatMessage {
+        +str message_id
+        +str content
+        +str role
+    }
+
+    UIController "1" *-- "1" DatabaseManager
+    UIController "1" *-- "1" RAGEngine
+    UIController "1" *-- "1" LLMInterface
+    DatabaseManager "1" *-- "N" User
+    DatabaseManager "1" *-- "N" ChatMessage
