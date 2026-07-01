@@ -1,0 +1,132 @@
+classDiagram
+    %% --- LAYER 1: CONFIGURATION (TOP) ---
+    class CourseConfiguration {
+        +Dict COURSE_STRUCTURE
+        +get_chapters(semester, subject) List
+        +get_subjects(semester) Dict
+    }
+
+    %% --- LAYER 2: INTERFACES & ABSTRACTS ---
+    class IDataPersistence {
+        <<interface>>
+        +save_user() str
+        +get_user() User
+        +save_message() void
+    }
+    class ISearchService {
+        <<interface>>
+        +search() List
+        +upload() bool
+    }
+    class ILLMService {
+        <<interface>>
+        +chat() str
+        +chat_stream() Generator
+    }
+
+    %% --- LAYER 3: CORE APPLICATION (CENTER) ---
+    class UIController {
+        +StreamlitSessionState session_state
+        +int selected_semester
+        +str selected_subject
+        +str current_page
+        +List chat_history
+        +main() void
+        +show_login() void
+        +show_semester_dashboard() void
+        +show_subject_page() void
+        +show_chat_assistant() void
+        +hash_password(str) str
+        +update_progress(str, int) void
+        +get_progress_percentage(str) float
+    }
+
+    class DatabaseManager {
+        -bool use_cosmos
+        -str db_path
+        -CosmosClient client
+        -Container container
+        +save_user(email, password, name) str
+        +get_user(email) User
+        +save_message(user_id, subject, role, content) void
+        +load_chat_history(user_id, subject) List
+        +save_progress(user_id, semester, subject, mins) void
+        +get_progress(user_id, semester, subject) int
+        -_init_sqlite() void
+    }
+
+    class RAGEngine {
+        +str endpoint
+        +str index_name
+        +SearchClient search_client
+        +search(query, semester, subject) List
+        +create_index() SearchIndex
+        +upload_document(doc) bool
+    }
+
+    class LLMInterface {
+        +str github_endpoint
+        +str github_token
+        +bool use_github
+        +bool use_azure
+        +chat(messages, temp) str
+        +chat_stream(messages) Generator
+        -_github_chat(messages, temp) str
+        -_azure_chat(messages, temp) str
+    }
+
+    %% --- LAYER 4: DOMAIN MODELS (BOTTOM) ---
+    class User {
+        +str user_id
+        +str email
+        +str password_hash
+        +str name
+        +int semester_preference
+        +datetime created_at
+        +authenticate(email, password) bool
+        +update_profile(name, email) void
+    }
+
+    class Progress {
+        +str user_id
+        +int semester
+        +str subject_code
+        +int minutes_studied
+        +datetime last_updated
+        +increment_study_time(minutes) void
+        +calculate_percentage() float
+    }
+
+    class ChatMessage {
+        +str message_id
+        +str user_id
+        +str subject
+        +str role
+        +str content
+        +List citations
+        +datetime timestamp
+        +get_sources() List
+        +to_dict() dict
+    }
+
+    %% --- RELATIONSHIPS & MULTIPLICITY ---
+    
+    %% UIController Structural Components
+    UIController "1" *-- "1" DatabaseManager : Core Persistence
+    UIController "1" *-- "1" RAGEngine : Cognitive Search
+    UIController "1" *-- "1" LLMInterface : AI Text Generation
+    UIController "1" o-- "1" CourseConfiguration : Reads Static Config
+    
+    %% Interface Implementations
+    DatabaseManager ..|> IDataPersistence : Implements
+    RAGEngine ..|> ISearchService : Implements
+    LLMInterface ..|> ILLMService : Implements
+    
+    %% Data / Domain Operations
+    DatabaseManager "1" *-- "N" User : Manages
+    DatabaseManager "1" *-- "N" Progress : Tracks
+    DatabaseManager "1" *-- "N" ChatMessage : Stores
+    
+    %% Cross-Domain Associations
+    RAGEngine "N" --> "1" CourseConfiguration : Queries Course Map
+    LLMInterface "N" --> "N" ChatMessage : Processes
